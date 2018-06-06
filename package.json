@@ -1,0 +1,25 @@
+{
+  "name": "electron_post_fetcher",
+  "version": "1.0.0",
+  "description": "Fetch public posts from Facebook pages & profiles",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "facebook",
+    "post",
+    "fetcher",
+    "electron",
+    "post",
+    "fetcher"
+  ],
+  "author": "Samyak Jain",
+  "license": "MIT",
+  "dependencies": {
+    "electron-prebuilt": "^1.4.13",
+    "fb": "^2.0.0",
+    "jquery": "^3.3.1"
+  }
+}

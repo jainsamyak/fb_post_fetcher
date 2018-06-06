@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="bootstrap-3.3.7-dist/css/bootstrap.css">
+    <script src="bootstrap-3.3.7-dist/js/bootstrap.js"></script>
+    <script src="js/jquery.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Dancing+Script|Merriweather|Open+Sans|Roboto|Source+Sans+Pro" rel="stylesheet">
+</head>
+
+<body>
+
+    <script>
+        window.fbAsyncInit = function () {
+            FB.init({
+                appId: '1241602892652913',
+                cookie: true,
+                xfbml: true,
+                version: 'v3.0'
+            });
+            testAPI();
+            FB.AppEvents.logPageView();
+            FB.getLoginStatus(function (response) {
+                statusChangeCallback(response);
+            });
+        };
+
+        (function (d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) { return; }
+            js = d.createElement(s); js.id = id;
+            js.src = "https://connect.facebook.net/en_US/sdk.js";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+
+        function statusChangeCallback(response) {
+            if (response.status == 'connected') {
+                let ac_token = response.authResponse.accessToken;
+                alert(ac_token);
+                testAPI();
+            } else {
+                console.log("Nay!");
+            }
+        }
+        function checkLoginState() {
+            FB.getLoginStatus(function (response) {
+                statusChangeCallback(response);
+            });
+        }
+        function testAPI() {
+            console.log('Welcome!  Fetching your information.... ');
+            let ac_token = 'EAACEdEose0cBAFaSgxZAXS8qgpkrU92ijlPmwzvXQvZC6l0eoNmX7ui73XLw3UuVZCRPZAoq9cbIZArYqWZCR5OCkjlnQCzME0qWivmAJfKDFTckcYZCO9LOYEAEd23BUdyPqW4YOLhIN8eOOZATAMZCMc3asumtZAZCkrbFfN854a3kNLhU5UfwHBmZCrGiwSWsTd93izyzUDlIIAZDZD';
+            FB.api('/me', {
+                access_token: ac_token
+            }, function (response) {
+                console.log(JSON.stringify(response));
+
+            });
+        }
+    </script>
+
+    <div class="title-bar">
+        <div class="title-left">
+            Built with Electron
+        </div>
+        <div class="title-main">
+            Facebook Post Fetcher & Downloader
+        </div>
+        <div class="title-right">
+            Fork on Github
+        </div>
+    </div>
+    <div class="main-container">
+        <form id="regForm">
+            <div class="dialog">
+                <div class="tab">
+                    <div class="option">
+                        <div class="fb-login-button" data-width="500" data-max-rows="1" data-size="large" data-button-type="login_with" data-show-faces="true"
+                            data-auto-logout-link="true" data-use-continue-as="true"></div>
+                    </div>
+                    <div class="option form-group-lg flex">
+                        <div>
+                            <button class="ac-login">Continue with Access Token</button>
+                        </div>
+                        <input type="text" name="" id="txt_ac_token" class="form-control" required placeholder="Access Token">
+                    </div>
+                </div>
+                <div class="tab">
+                    <div class="option">
+                        <div class="fb-login-button" data-width="500" data-max-rows="1" data-size="large" data-button-type="login_with" data-show-faces="true"
+                            data-auto-logout-link="true" data-use-continue-as="true"></div>
+                    </div>
+                    <div class="option form-group-lg flex">
+                        <div>
+                            <button class="ac-login">Continue with Access Token 2</button>
+                        </div>
+                        <input type="text" name="" id="txt_ac_token" class="form-control" required placeholder="Access Token">
+                    </div>
+                </div>
+                <div style="overflow:auto;">
+                    <div style="float:right;">
+                        <button type="button" id="prevBtn" onclick="nextPrev(-1)">Previous</button>
+                        <button type="button" id="nextBtn" onclick="nextPrev(1)">Next</button>
+                    </div>
+                </div>
+                <div style="text-align:center;margin-top:40px;">
+                    <span class="step"></span>
+                    <span class="step"></span>
+                    <span class="step"></span>
+                    <span class="step"></span>
+                </div>
+            </div>
+
+
+        </form>
+
+    </div>
+</body>
+<script src="js/form.js"></script>
+
+</html>
