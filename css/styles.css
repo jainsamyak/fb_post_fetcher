@@ -36,6 +36,47 @@ body{
    border-bottom-left-radius: 7px;
     border-bottom-right-radius: 7px;
 }
+.box{
+    width: 100%;
+    font-size: 1.8rem;
+    text-align: center;
+    padding: 1.5rem;
+}
+button{
+    font-family: 'Open Sans';
+    font-size: 1.7rem;
+}
+.form-group{
+    width: 100%;
+    text-align: center;
+}
+.no-bevel{
+    width: 100%;
+    padding: 1.5rem;
+    transition: all 300ms ease-in-out;
+    border-radius: 5px;
+    margin-bottom: 1rem;
+}
+.blue{
+    color: white;
+    background: #1565C0;
+}
+.blue:hover{
+    color: #1565C0;
+    background: rgb(241, 243, 245)
+}
+.disabled{
+    cursor: not-allowed !important;
+    opacity: 0.65 !important;
+}
+.green{
+    background: #1B5E20;
+    color: white;
+}
+.green:hover{
+    background: rgb(241, 247, 242);
+    color: #1B5E20;
+}
 .main-container{
     position: absolute;
     top: 0;
@@ -47,8 +88,10 @@ body{
 }
 .dialog{
     border: 1px solid#bdc6de;
-    padding: 2rem;
+    padding: 3rem;
     border-radius: 7px;
+    height: 50rem;
+    width: 40rem;
 }
 .ac-login{
     background:#3b5998;
@@ -69,7 +112,13 @@ body{
     background: rgb(255, 255, 255);
 }
 
-
+.steps{
+    margin-bottom: 2rem;
+    width: 100%;
+    text-align: center;
+    font-size: 1.8rem;
+    font-weight: 600;
+}
 
 /* W3 */
 
@@ -82,6 +131,8 @@ body{
   /* Hide all steps by default: */
   .tab {
     display: none;
+    height: 100%;
+    width: 100%;
   }
   
   button:hover {

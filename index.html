@@ -5,11 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>FB POST FETCHER</title>
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="bootstrap-3.3.7-dist/css/bootstrap.css">
-    <script src="bootstrap-3.3.7-dist/js/bootstrap.js"></script>
     <script src="js/jquery.js"></script>
+    <script src="js/lib.js"></script>
+    <script src="bootstrap-3.3.7-dist/js/bootstrap.js"></script>
     <link href="https://fonts.googleapis.com/css?family=Dancing+Script|Merriweather|Open+Sans|Roboto|Source+Sans+Pro" rel="stylesheet">
 </head>
 
@@ -23,7 +24,7 @@
                 xfbml: true,
                 version: 'v3.0'
             });
-            testAPI();
+            //testAPI();
             FB.AppEvents.logPageView();
             FB.getLoginStatus(function (response) {
                 statusChangeCallback(response);
@@ -52,14 +53,32 @@
                 statusChangeCallback(response);
             });
         }
-        function testAPI() {
+        function fetch_page(ac_token,pg_name) {
             console.log('Welcome!  Fetching your information.... ');
-            let ac_token = 'EAACEdEose0cBAFaSgxZAXS8qgpkrU92ijlPmwzvXQvZC6l0eoNmX7ui73XLw3UuVZCRPZAoq9cbIZArYqWZCR5OCkjlnQCzME0qWivmAJfKDFTckcYZCO9LOYEAEd23BUdyPqW4YOLhIN8eOOZATAMZCMc3asumtZAZCkrbFfN854a3kNLhU5UfwHBmZCrGiwSWsTd93izyzUDlIIAZDZD';
-            FB.api('/me', {
-                access_token: ac_token
+            FB.api('/'+pg_name, {
+                access_token: 'EAACEdEose0cBADWJIOk5ouJU1UNK97UtwfSZCWvkWYBAp8u7idZApXhWQ9nLbjD1llkbXNOvDZBRQZBaHZC4nhEMzd4RjozciCg5AiYvuWG5rfXZAn5OhpgH5YZBb3Qsr6oZBPnbxTZC0z1ppcD4XwPvVsYgKHd7ZCuVdZBxykO66naS6fIIafjF6VXZC20Bm3sX7ISmSZA3d54ZAw5QZDZD'
             }, function (response) {
-                console.log(JSON.stringify(response));
-
+                if(response.hasOwnProperty('name')){
+                    $('#pg_status').html('<i class="glyphicon glyphicon-ok" style="color:green"></i>');
+                    $('#pg_status').append('<br>'+response.name+'<br>Page Found!');
+                    $('#pg_status').removeClass('alert alert-danger');                                                                                             
+                    $('#pg_status').addClass('alert alert-success'); 
+                    $('#view_posts').removeAttr('disabled');
+                    $('#view_posts').removeClass('disabled');   
+                    $('#download_posts').removeAttr('disabled');
+                    $('#download_posts').removeClass('disabled');                                                                          
+                }
+                else{
+                    $('#pg_status').html('<i class="glyphicon glyphicon-remove" style="color:red"></i>');
+                    $('#pg_status').append('<br>'+response.error.message+response.error.type);
+                    $('#pg_status').removeClass('alert alert-success');                                                                                             
+                    $('#pg_status').addClass('alert alert-danger');   
+                    $('#view_posts').attr('disabled');
+                    $('#view_posts').addClass('disabled');   
+                    $('#download_posts').attr('disabled');
+                    $('#download_posts').addClass('disabled');                                                                       
+                }
+                console.log((response.error));
             });
         }
     </script>
@@ -77,31 +96,49 @@
     </div>
     <div class="main-container">
         <form id="regForm">
-            <div class="dialog">
+            <div class="dialog flex">
                 <div class="tab">
+                    <div class="steps">Step 1</div>
                     <div class="option">
                         <div class="fb-login-button" data-width="500" data-max-rows="1" data-size="large" data-button-type="login_with" data-show-faces="true"
                             data-auto-logout-link="true" data-use-continue-as="true"></div>
                     </div>
-                    <div class="option form-group-lg flex">
-                        <div>
-                            <button class="ac-login">Continue with Access Token</button>
+                    <div class="option flex">
+                        <div class="form-group">
+                            <input type="text" name="" id="txt_ac_token" class="form-control" required placeholder="Access Token">
                         </div>
-                        <input type="text" name="" id="txt_ac_token" class="form-control" required placeholder="Access Token">
+                        <div class="form-group">
+                            <button class="ac-login" onclick="nextPrev(1)" type="button" id="ac-login">Continue with Access Token</button>
+                        </div>
                     </div>
                 </div>
                 <div class="tab">
-                    <div class="option">
-                        <div class="fb-login-button" data-width="500" data-max-rows="1" data-size="large" data-button-type="login_with" data-show-faces="true"
-                            data-auto-logout-link="true" data-use-continue-as="true"></div>
-                    </div>
-                    <div class="option form-group-lg flex">
-                        <div>
-                            <button class="ac-login">Continue with Access Token 2</button>
+                    <div class="steps">Step 2</div>
+                    <div class="option flex">
+                        <div class="form-group">
+                            <label for="">Enter Page Name</label>
+                            <input type="text" name="" id="txt_pg_name" class="form-control">
                         </div>
-                        <input type="text" name="" id="txt_ac_token" class="form-control" required placeholder="Access Token">
+                        <div class="form-group">
+                            <button class="ac-login" onclick="nextPrev(1)" type="button" id="btn-set-pg">Continue</button>
+                        </div>
                     </div>
                 </div>
+                <div class="tab">
+                        <div class="steps">Step 3</div>
+                        <div class="box" id="pg_status">
+                        </div>
+                        <div class="option flex">
+                            <div class="form-group" style="width: 100%">
+                                <button class="blue no-bevel btn-lg" id="view_posts">View Posts</button>
+                                <br>
+                                <button class="green btn-lg no-bevel" id="download_posts">Download Posts</button>
+                            </div>
+                            <div class="form-group">
+                                <button class="ac-login" onclick="" type="button" id="btn-set-pg">Continue</button>
+                            </div>
+                        </div>
+                    </div>
                 <div style="overflow:auto;">
                     <div style="float:right;">
                         <button type="button" id="prevBtn" onclick="nextPrev(-1)">Previous</button>
