@@ -57,15 +57,128 @@
         }
         function fetch_details(ac_token, pg_name) {
             FB.api('/' + pg_name, {
-                access_token: 'EAACEdEose0cBAMhb50TREZAFufL8ZBlye6jBcKihZAfvKYRznMZBPVCTRKeV9LbOqvTqmwPhnbiXRsluZCgHZBHgrOAyvyOPBX9XzmL1WO8FnePSKYB74ZB65RLT9uRE8x3fuTJlaBbeRq9jEpDS2q1HyqBX3IDpuyWX1PJAtqHifjgmj6m2gPosqEkHyWkiXYZD',
-                fields: 'fan_count'
+                access_token: 'EAACEdEose0cBAMKdVwxzVy8ZCM8WnhIXYCZB823HpK96Q2VaqZBId5VZBt5uQydSM63Ik2sPB1LzbBvnVnRkAIG8v755OvWMVnGskkEtii6bn4c4O787KCkC3JHz9rhX9m06Xkp1rlGz6ulFmypf2xZCS7ZCFYmunhYmJeNw7NIuGrw1QhrVAt9LiVkKhNBwL7UO55g8bLnQZDZD',
+                fields: 'fan_count,name'
             }, function (response) {
                 if (response.hasOwnProperty('fan_count')) {
                     $('#followers').html(response.fan_count);
-                }else{
+                    $('#page-name').html(response.name);
+                    FB.api('/' + pg_name + '/posts', {
+                        access_token: 'EAACEdEose0cBAMKdVwxzVy8ZCM8WnhIXYCZB823HpK96Q2VaqZBId5VZBt5uQydSM63Ik2sPB1LzbBvnVnRkAIG8v755OvWMVnGskkEtii6bn4c4O787KCkC3JHz9rhX9m06Xkp1rlGz6ulFmypf2xZCS7ZCFYmunhYmJeNw7NIuGrw1QhrVAt9LiVkKhNBwL7UO55g8bLnQZDZD',
+                        limit: 1,
+                        fields: 'description,full_picture,message,likes.limit(0).summary(total_count),comments.limit(0).summary(total_count),shares.limit(0).summary(total_count)'
+                    }, function (response) {
+                        console.log(response);
+                        if (response.hasOwnProperty('data')) {
+                            let data = response.data[0];
+
+                            $('#post-title').html(data.description);
+                            $('#post-message').html(data.message);
+                            $('#post-likes').val(data.likes.summary.total_count);
+                            $('#post-comments').val(data.comments.summary.total_count);
+                            $('#post-shares').val(data.shares.count);
+                            if (response.hasOwnProperty('paging')) {
+                                let paging = response.paging;
+                                paging.hasOwnProperty('next') ? enable_btn('next-post') : disable_btn('next-post');
+                                paging.hasOwnProperty('previous') ? enable_btn('prev-post') : disable_btn('prev-post');
+                            }
+                        } else {
+                            alert("Error fetcching details!");
+                        }
+                    });
+                } else {
                     alert("Error fetcching details!");
                 }
             });
+        }
+        function enable_btn(id) {
+            $('#' + id).removeAttr('disabled');
+            $('#' + id).removeClass('disabled');
+        }
+
+        function disable_btn(id) {
+            $('#' + id).attr('disabled');
+            $('#' + id).addClass('disabled');
+        }
+        function display_prev_next(ac_token, pg_name, flag, url) {
+            if (flag == 1) {
+                FB.api('/' + pg_name, {
+                    access_token: 'EAACEdEose0cBAMKdVwxzVy8ZCM8WnhIXYCZB823HpK96Q2VaqZBId5VZBt5uQydSM63Ik2sPB1LzbBvnVnRkAIG8v755OvWMVnGskkEtii6bn4c4O787KCkC3JHz9rhX9m06Xkp1rlGz6ulFmypf2xZCS7ZCFYmunhYmJeNw7NIuGrw1QhrVAt9LiVkKhNBwL7UO55g8bLnQZDZD',
+                    fields: 'fan_count,name'
+                }, function (response) {
+                    if (response.hasOwnProperty('fan_count')) {
+                        $('#followers').html(response.fan_count);
+                        $('#page-name').html(response.name);
+                        FB.api('/' + pg_name + '/posts', {
+                            access_token: 'EAACEdEose0cBAMKdVwxzVy8ZCM8WnhIXYCZB823HpK96Q2VaqZBId5VZBt5uQydSM63Ik2sPB1LzbBvnVnRkAIG8v755OvWMVnGskkEtii6bn4c4O787KCkC3JHz9rhX9m06Xkp1rlGz6ulFmypf2xZCS7ZCFYmunhYmJeNw7NIuGrw1QhrVAt9LiVkKhNBwL7UO55g8bLnQZDZD',
+                            limit: 1,
+                            after: url,
+                            fields: 'description,full_picture,message,likes.limit(0).summary(total_count),comments.limit(0).summary(total_count),shares.limit(0).summary(total_count)'
+                        }, function (response) {
+                            console.log(response);
+                            if (response.hasOwnProperty('data')) {
+                                let data = response.data[0];
+
+                                $('#post-title').html(data.description);
+                                $('#post-message').html(data.message);
+                                $('#post-likes').val(data.likes.summary.total_count);
+                                $('#post-comments').val(data.comments.summary.total_count);
+                                $('#post-shares').val(data.shares.count);
+                                if (response.hasOwnProperty('paging')) {
+                                    let paging = response.paging;
+                                    paging.hasOwnProperty('next') ? enable_btn('next-post') : disable_btn('next-post');
+                                    paging.hasOwnProperty('previous') ? enable_btn('prev-post') : disable_btn('prev-post');
+                                    window.after = paging.cursors.after;
+                                    window.before = paging.cursors.before;
+
+                                }
+                            } else {
+                                alert("Error fetcching details!");
+                            }
+                        });
+                    } else {
+                        alert("Error fetcching details!");
+                    }
+                });
+            }
+            else {
+                FB.api('/' + pg_name, {
+                    access_token: 'EAACEdEose0cBAMKdVwxzVy8ZCM8WnhIXYCZB823HpK96Q2VaqZBId5VZBt5uQydSM63Ik2sPB1LzbBvnVnRkAIG8v755OvWMVnGskkEtii6bn4c4O787KCkC3JHz9rhX9m06Xkp1rlGz6ulFmypf2xZCS7ZCFYmunhYmJeNw7NIuGrw1QhrVAt9LiVkKhNBwL7UO55g8bLnQZDZD',
+                    fields: 'fan_count,name'
+                }, function (response) {
+                    if (response.hasOwnProperty('fan_count')) {
+                        $('#followers').html(response.fan_count);
+                        $('#page-name').html(response.name);
+                        FB.api('/' + pg_name + '/posts', {
+                            access_token: 'EAACEdEose0cBAMKdVwxzVy8ZCM8WnhIXYCZB823HpK96Q2VaqZBId5VZBt5uQydSM63Ik2sPB1LzbBvnVnRkAIG8v755OvWMVnGskkEtii6bn4c4O787KCkC3JHz9rhX9m06Xkp1rlGz6ulFmypf2xZCS7ZCFYmunhYmJeNw7NIuGrw1QhrVAt9LiVkKhNBwL7UO55g8bLnQZDZD',
+                            limit: 1,
+                            before: url,
+                            fields: 'description,full_picture,message,likes.limit(0).summary(total_count),comments.limit(0).summary(total_count),shares.limit(0).summary(total_count)'
+                        }, function (response) {
+                            console.log(response);
+                            if (response.hasOwnProperty('data')) {
+                                let data = response.data[0];
+                                $('#post-title').html(data.description);
+                                $('#post-message').html(data.message);
+                                $('#post-likes').val(data.likes.summary.total_count);
+                                $('#post-comments').val(data.comments.summary.total_count);
+                                $('#post-shares').val(data.shares.count);
+                                if (response.hasOwnProperty('paging')) {
+                                    let paging = response.paging;
+                                    paging.hasOwnProperty('next') ? enable_btn('next-post') : disable_btn('next-post');
+                                    paging.hasOwnProperty('previous') ? enable_btn('prev-post') : disable_btn('prev-post');
+                                    window.after = paging.cursors.after;
+                                    window.before = paging.cursors.before;
+                                }
+                            } else {
+                                alert("Error fetcching details!");
+                            }
+                        });
+                    } else {
+                        alert("Error fetcching details!");
+                    }
+                });
+            }
         }
     </script>
 
@@ -121,8 +234,8 @@
                 </div>
                 <div class="navigation">
                     <div>
-                        <button class="btn btn-default">
-                            <i class="glyphicon glyphicon-triangle-left"></i> Load Previous </button>
+                        <button class="btn btn-default" id="prev-post" onclick="display_prev_next('EAACEdEose0cBAMKdVwxzVy8ZCM8WnhIXYCZB823HpK96Q2VaqZBId5VZBt5uQydSM63Ik2sPB1LzbBvnVnRkAIG8v755OvWMVnGskkEtii6bn4c4O787KCkC3JHz9rhX9m06Xkp1rlGz6ulFmypf2xZCS7ZCFYmunhYmJeNw7NIuGrw1QhrVAt9LiVkKhNBwL7UO55g8bLnQZDZD', 'ted', 0, window.before)">
+                            <i class="glyphicon glyphicon-triangle-left" ></i> Load Previous </button>
                     </div>
                     <div>
                         <button class="btn btn-danger"> Return to Main
@@ -131,7 +244,8 @@
                         </button>
                     </div>
                     <div>
-                        <button class="btn btn-default"> Load Next
+                        <button class="btn btn-default" id="next-post" onclick="display_prev_next('EAACEdEose0cBAMKdVwxzVy8ZCM8WnhIXYCZB823HpK96Q2VaqZBId5VZBt5uQydSM63Ik2sPB1LzbBvnVnRkAIG8v755OvWMVnGskkEtii6bn4c4O787KCkC3JHz9rhX9m06Xkp1rlGz6ulFmypf2xZCS7ZCFYmunhYmJeNw7NIuGrw1QhrVAt9LiVkKhNBwL7UO55g8bLnQZDZD', 'ted', 1, window.after)">
+                            Load Next
                             <i class="glyphicon glyphicon-triangle-right"></i>
                         </button>
                     </div>
