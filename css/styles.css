@@ -94,7 +94,7 @@ button{
     padding: 3rem;
     border-radius: 7px;
     height: 50rem;
-    width: 40rem;
+    width: 70rem;
 }
 .ac-login{
     background:#3b5998;
@@ -122,14 +122,30 @@ button{
     font-size: 1.8rem;
     font-weight: 600;
 }
-
+.selection{
+    border: 1px dashed;
+    padding: 1.5rem;
+}
+.selection select{
+    margin-bottom: 1rem;
+    background: #E8EAF6;
+    color: #512DA8;
+}
+.selection select option{
+    padding: 0.5rem;
+}
+select::selection{
+    background: white;
+}
 /* View Styles */
 
 .view{
-    width: 80%;
+    width: 100%;
+    height: 100%;
     border: 1px solid;
     border-radius: 7px;
     padding: 1.5rem;
+    background: #E8EAF6;
 }
 .post textarea{
     resize: none;
@@ -147,10 +163,12 @@ button{
 .post .navigation{
     display: flex;
     justify-content: space-around;
+    padding: 1rem;
 }
 .details{
-    border-bottom: 3px solid;
+    border-bottom: 3px solid #6200EA;
     display: flex;
+    align-items: center;
     justify-content: space-between;
     padding: 1rem;
     margin-bottom: 1rem;

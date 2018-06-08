@@ -17,5 +17,11 @@ $(document).ready(function () {
         win2.loadURL(modalPath)
         win2.show()
     });
+    $('#transfer-pa').on('click',function(){
+        $('#page-attributes  > option:selected').each(function() {
+            $(this).remove();
+            $('#page-attributes-selected').append('<option value="'+$(this).val()+'">'+$(this).text()+'</option>');
+        });
+    });
 });
 

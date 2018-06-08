@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>FB POST FETCHER</title>
-    <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
+    <script>if (typeof module === 'object') { window.module = module; module = undefined; }</script>
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="bootstrap-3.3.7-dist/css/bootstrap.css">
     <script src="js/jquery.js"></script>
@@ -55,35 +55,35 @@
                 statusChangeCallback(response);
             });
         }
-        function fetch_page(ac_token,pg_name) {
+        function fetch_page(ac_token, pg_name) {
             console.log('Welcome!  Fetching your information.... ');
-            FB.api('/'+pg_name, {
-                access_token: 'EAACEdEose0cBAMhb50TREZAFufL8ZBlye6jBcKihZAfvKYRznMZBPVCTRKeV9LbOqvTqmwPhnbiXRsluZCgHZBHgrOAyvyOPBX9XzmL1WO8FnePSKYB74ZB65RLT9uRE8x3fuTJlaBbeRq9jEpDS2q1HyqBX3IDpuyWX1PJAtqHifjgmj6m2gPosqEkHyWkiXYZD'
+            FB.api('/' + pg_name, {
+                access_token: ac_token
             }, function (response) {
-                if(response.hasOwnProperty('name')){
+                if (response.hasOwnProperty('name')) {
                     $('#pg_status').html('<i class="glyphicon glyphicon-ok" style="color:green"></i>');
-                    $('#pg_status').append('<br>'+response.name+'<br>Page Found!');
-                    $('#pg_status').removeClass('alert alert-danger');                                                                                             
-                    $('#pg_status').addClass('alert alert-success'); 
+                    $('#pg_status').append('<br>' + response.name + '<br>Page Found!');
+                    $('#pg_status').removeClass('alert alert-danger');
+                    $('#pg_status').addClass('alert alert-success');
                     $('#view_posts').removeAttr('disabled');
-                    $('#view_posts').removeClass('disabled');   
+                    $('#view_posts').removeClass('disabled');
                     $('#download_posts').removeAttr('disabled');
-                    $('#download_posts').removeClass('disabled');                                                                          
+                    $('#download_posts').removeClass('disabled');
                 }
-                else{
+                else {
                     $('#pg_status').html('<i class="glyphicon glyphicon-remove" style="color:red"></i>');
-                    $('#pg_status').append('<br>'+response.error.message+response.error.type);
-                    $('#pg_status').removeClass('alert alert-success');                                                                                             
-                    $('#pg_status').addClass('alert alert-danger');   
+                    $('#pg_status').append('<br>' + response.error.message + response.error.type);
+                    $('#pg_status').removeClass('alert alert-success');
+                    $('#pg_status').addClass('alert alert-danger');
                     $('#view_posts').attr('disabled');
-                    $('#view_posts').addClass('disabled');   
+                    $('#view_posts').addClass('disabled');
                     $('#download_posts').attr('disabled');
-                    $('#download_posts').addClass('disabled');                                                                       
+                    $('#download_posts').addClass('disabled');
                 }
                 console.log((response.error));
             });
         }
-        
+
     </script>
 
     <div class="title-bar">
@@ -128,20 +128,48 @@
                     </div>
                 </div>
                 <div class="tab">
-                        <div class="steps">Step 3</div>
-                        <div class="box" id="pg_status">
+                    <div class="steps">Step 3</div>
+                    <div class="box" id="pg_status">
+                    </div>
+                    <div class="option flex">
+                        <div class="form-group" style="width: 100%">
+                            <button class="blue no-bevel btn-lg" id="view_posts" type="button">View Posts</button>
+                            <br>
+                            <button class="green btn-lg no-bevel" onclick="nextPrev(1)" id="download_posts" type="button">Download Posts</button>
                         </div>
-                        <div class="option flex">
-                            <div class="form-group" style="width: 100%">
-                                <button class="blue no-bevel btn-lg" id="view_posts">View Posts</button>
-                                <br>
-                                <button class="green btn-lg no-bevel" id="download_posts">Download Posts</button>
-                            </div>
-                            <div class="form-group">
-                                <button class="ac-login" onclick="" type="button" id="btn-set-pg">Continue</button>
-                            </div>
+                        <div class="form-group">
+                            <button class="ac-login" onclick="" type="button" id="btn-set-pg">Continue</button>
                         </div>
                     </div>
+                </div>
+                <div class="tab">
+                    <div class="steps">Step 4</div>
+                    <div class="box">
+                        Select the attributes
+                    </div>
+                    <div class="option flex">
+                        <div class="form-group selection" style="width: 100%">
+                            <label for="">Page Attributes</label>
+                            <select name="page-attributes" id="page-attributes" multiple class="form-control">
+                                <option value="pa-name">Page Name</option>
+                                <option value="pa-fancount">Fan Count</option>
+                                <option value="pa-cover">Cover Image</option>
+                                <option value="pa-picture">Profile Picture</option>
+                                <option value="pa-link">Link</option>
+                                <option value="pa-status">Verification Status</option>
+                            </select>
+                            <button id="transfer-pa" class="btn btn-default" type="button">
+                                <i class="glyphicon glyphicon-chevron-down"></i>
+                            </button>
+                            <select name="" id="page-attributes-selected" multiple class="form-control">
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <button class="ac-login" onclick="" type="button" id="btn-set-pg">Continue</button>
+                        </div>
+                    </div>
+                </div>
+
                 <div style="overflow:auto;">
                     <div style="float:right;">
                         <button type="button" id="prevBtn" onclick="nextPrev(-1)">Previous</button>
