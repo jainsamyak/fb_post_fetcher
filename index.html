@@ -6,17 +6,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>FB POST FETCHER</title>
+    <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="bootstrap-3.3.7-dist/css/bootstrap.css">
     <script src="js/jquery.js"></script>
     <script src="js/lib.js"></script>
     <script src="bootstrap-3.3.7-dist/js/bootstrap.js"></script>
     <link href="https://fonts.googleapis.com/css?family=Dancing+Script|Merriweather|Open+Sans|Roboto|Source+Sans+Pro" rel="stylesheet">
+    <script>if (window.module) module = window.module;</script>
 </head>
 
 <body>
 
     <script>
+        require('./renderer.js')
         window.fbAsyncInit = function () {
             FB.init({
                 appId: '1241602892652913',
@@ -56,7 +59,7 @@
         function fetch_page(ac_token,pg_name) {
             console.log('Welcome!  Fetching your information.... ');
             FB.api('/'+pg_name, {
-                access_token: 'EAACEdEose0cBADWJIOk5ouJU1UNK97UtwfSZCWvkWYBAp8u7idZApXhWQ9nLbjD1llkbXNOvDZBRQZBaHZC4nhEMzd4RjozciCg5AiYvuWG5rfXZAn5OhpgH5YZBb3Qsr6oZBPnbxTZC0z1ppcD4XwPvVsYgKHd7ZCuVdZBxykO66naS6fIIafjF6VXZC20Bm3sX7ISmSZA3d54ZAw5QZDZD'
+                access_token: 'EAACEdEose0cBAMhb50TREZAFufL8ZBlye6jBcKihZAfvKYRznMZBPVCTRKeV9LbOqvTqmwPhnbiXRsluZCgHZBHgrOAyvyOPBX9XzmL1WO8FnePSKYB74ZB65RLT9uRE8x3fuTJlaBbeRq9jEpDS2q1HyqBX3IDpuyWX1PJAtqHifjgmj6m2gPosqEkHyWkiXYZD'
             }, function (response) {
                 if(response.hasOwnProperty('name')){
                     $('#pg_status').html('<i class="glyphicon glyphicon-ok" style="color:green"></i>');

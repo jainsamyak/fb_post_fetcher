@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>FB POST FETCHER</title>
+    <script>if (typeof module === 'object') { window.module = module; module = undefined; }</script>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="bootstrap-3.3.7-dist/css/bootstrap.css">
+    <script src="js/jquery.js"></script>
+    <script src="js/lib.js"></script>
+    <script src="bootstrap-3.3.7-dist/js/bootstrap.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Dancing+Script|Merriweather|Open+Sans|Roboto|Source+Sans+Pro" rel="stylesheet">
+    <script>if (window.module) module = window.module;</script>
+</head>
+
+<body>
+
+    <script>
+        window.fbAsyncInit = function () {
+            FB.init({
+                appId: '1241602892652913',
+                cookie: true,
+                xfbml: true,
+                version: 'v3.0'
+            });
+            //testAPI();
+            FB.AppEvents.logPageView();
+            FB.getLoginStatus(function (response) {
+                statusChangeCallback(response);
+            });
+        };
+
+        (function (d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) { return; }
+            js = d.createElement(s); js.id = id;
+            js.src = "https://connect.facebook.net/en_US/sdk.js";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+
+        function statusChangeCallback(response) {
+            if (response.status == 'connected') {
+                let ac_token = response.authResponse.accessToken;
+                alert(ac_token);
+                testAPI();
+            } else {
+                console.log("Nay!");
+            }
+        }
+        function checkLoginState() {
+            FB.getLoginStatus(function (response) {
+                statusChangeCallback(response);
+            });
+        }
+        function fetch_page(ac_token, pg_name) {
+            console.log('Welcome!  Fetching your information.... ');
+            FB.api('/' + pg_name, {
+                access_token: 'EAACEdEose0cBADWJIOk5ouJU1UNK97UtwfSZCWvkWYBAp8u7idZApXhWQ9nLbjD1llkbXNOvDZBRQZBaHZC4nhEMzd4RjozciCg5AiYvuWG5rfXZAn5OhpgH5YZBb3Qsr6oZBPnbxTZC0z1ppcD4XwPvVsYgKHd7ZCuVdZBxykO66naS6fIIafjF6VXZC20Bm3sX7ISmSZA3d54ZAw5QZDZD'
+            }, function (response) {
+                if (response.hasOwnProperty('name')) {
+                    $('#pg_status').html('<i class="glyphicon glyphicon-ok" style="color:green"></i>');
+                    $('#pg_status').append('<br>' + response.name + '<br>Page Found!');
+                    $('#pg_status').removeClass('alert alert-danger');
+                    $('#pg_status').addClass('alert alert-success');
+                    $('#view_posts').removeAttr('disabled');
+                    $('#view_posts').removeClass('disabled');
+                    $('#download_posts').removeAttr('disabled');
+                    $('#download_posts').removeClass('disabled');
+                }
+                else {
+                    $('#pg_status').html('<i class="glyphicon glyphicon-remove" style="color:red"></i>');
+                    $('#pg_status').append('<br>' + response.error.message + response.error.type);
+                    $('#pg_status').removeClass('alert alert-success');
+                    $('#pg_status').addClass('alert alert-danger');
+                    $('#view_posts').attr('disabled');
+                    $('#view_posts').addClass('disabled');
+                    $('#download_posts').attr('disabled');
+                    $('#download_posts').addClass('disabled');
+                }
+                console.log((response.error));
+            });
+        }
+    </script>
+
+    <div class="title-bar">
+        <div class="title-left">
+            Built with Electron
+        </div>
+        <div class="title-main">
+            Facebook Post Fetcher & Downloader
+        </div>
+        <div class="title-right">
+            Fork on Github
+        </div>
+    </div>
+    <div class="main-container">
+        <div class="view">
+            <div class="details">
+                <div class="pg_name">
+                    <label for="">Page Name</label>
+                    <span>Emirates</span>
+                </div>
+                <div class="stats">
+                    <label for="">Followers</label>
+                    <span>1520110</span>˝
+                </div>
+
+            </div>
+            <div class="post">
+                <div class="post-title">
+                    <label for="">Title</label>
+                    <textarea readonly name="" id="" cols="50" rows="1">Post 1</textarea>
+                </div>
+                <div class="post-msg">
+                    <label for="">Message</label>
+                    <textarea name="" id="" cols="50" rows="10" readonly>
+                            Emirates is turning 10!
+                        </textarea>
+                </div>
+                <div class="post-stats ">
+                    <div>
+                        <label for="">Likes</label>
+                        <input type="text" name="" id="" readonly class="form-control">
+                    </div>
+                    <div>
+                        <label for="">Shares</label>
+                        <input type="text" name="" id="" readonly class="form-control">
+                    </div>
+                    <div>
+                        <label for="">Comments</label>
+                        <input type="text" name="" id="" readonly class="form-control">
+                    </div>
+
+                </div>
+                <div class="navigation">
+                    <div>
+                        <button class="btn btn-default">
+                            <i class="glyphicon glyphicon-triangle-left"></i> Load Previous </button>
+                    </div>
+                    <div>
+                        <button class="btn btn-danger"> Return to Main <i class="glyphicon glyphicon-retweet"></i></i>
+                        </button>
+                    </div>
+                    <div>
+                        <button class="btn btn-default"> Load Next
+                            <i class="glyphicon glyphicon-triangle-right"></i>
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="js/form.js"></script>
+
+</html>

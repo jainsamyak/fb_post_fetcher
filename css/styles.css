@@ -1,11 +1,13 @@
 :root{
     font-size: 10px;
 }
+
 body{
     margin: 0;
     font-size: 1.8rem;
 }
 .title-bar{
+    z-index: 1;
     color: white;
     width: 100%;
     display: flex;
@@ -78,6 +80,7 @@ button{
     color: #1B5E20;
 }
 .main-container{
+    z-index: -1;
     position: absolute;
     top: 0;
     display: flex;
@@ -119,6 +122,40 @@ button{
     font-size: 1.8rem;
     font-weight: 600;
 }
+
+/* View Styles */
+
+.view{
+    width: 80%;
+    border: 1px solid;
+    border-radius: 7px;
+    padding: 1.5rem;
+}
+.post textarea{
+    resize: none;
+    width: 100%;
+    padding: 1rem;
+    font-size: 1.8rem;
+    font-family: 'Source Sans Pro';
+    border: 1px solid;
+}
+.post .post-stats{
+    display: flex;
+    justify-content: space-between;
+    padding: 1.5rem;
+}
+.post .navigation{
+    display: flex;
+    justify-content: space-around;
+}
+.details{
+    border-bottom: 3px solid;
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
 
 /* W3 */
 
@@ -163,3 +200,21 @@ button{
   .step.finish {
     background-color: #4CAF50;
   }
+
+
+  /* Media Queries */
+@media (min-width: 0px){
+    :root{
+        font-size: 6px;
+    }
+}
+@media (min-width:720px){
+    :root{
+        font-size: 8px;
+    }
+}
+@media (min-width:1080px){
+    :root{
+        font-size: 10px;
+    }
+}
