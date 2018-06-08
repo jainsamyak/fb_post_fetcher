@@ -26,7 +26,7 @@
                 xfbml: true,
                 version: 'v3.0'
             });
-            //testAPI();
+            fetch_details('', 'ted');
             FB.AppEvents.logPageView();
             FB.getLoginStatus(function (response) {
                 statusChangeCallback(response);
@@ -55,32 +55,16 @@
                 statusChangeCallback(response);
             });
         }
-        function fetch_page(ac_token, pg_name) {
-            console.log('Welcome!  Fetching your information.... ');
+        function fetch_details(ac_token, pg_name) {
             FB.api('/' + pg_name, {
-                access_token: 'EAACEdEose0cBADWJIOk5ouJU1UNK97UtwfSZCWvkWYBAp8u7idZApXhWQ9nLbjD1llkbXNOvDZBRQZBaHZC4nhEMzd4RjozciCg5AiYvuWG5rfXZAn5OhpgH5YZBb3Qsr6oZBPnbxTZC0z1ppcD4XwPvVsYgKHd7ZCuVdZBxykO66naS6fIIafjF6VXZC20Bm3sX7ISmSZA3d54ZAw5QZDZD'
+                access_token: 'EAACEdEose0cBAMhb50TREZAFufL8ZBlye6jBcKihZAfvKYRznMZBPVCTRKeV9LbOqvTqmwPhnbiXRsluZCgHZBHgrOAyvyOPBX9XzmL1WO8FnePSKYB74ZB65RLT9uRE8x3fuTJlaBbeRq9jEpDS2q1HyqBX3IDpuyWX1PJAtqHifjgmj6m2gPosqEkHyWkiXYZD',
+                fields: 'fan_count'
             }, function (response) {
-                if (response.hasOwnProperty('name')) {
-                    $('#pg_status').html('<i class="glyphicon glyphicon-ok" style="color:green"></i>');
-                    $('#pg_status').append('<br>' + response.name + '<br>Page Found!');
-                    $('#pg_status').removeClass('alert alert-danger');
-                    $('#pg_status').addClass('alert alert-success');
-                    $('#view_posts').removeAttr('disabled');
-                    $('#view_posts').removeClass('disabled');
-                    $('#download_posts').removeAttr('disabled');
-                    $('#download_posts').removeClass('disabled');
+                if (response.hasOwnProperty('fan_count')) {
+                    $('#followers').html(response.fan_count);
+                }else{
+                    alert("Error fetcching details!");
                 }
-                else {
-                    $('#pg_status').html('<i class="glyphicon glyphicon-remove" style="color:red"></i>');
-                    $('#pg_status').append('<br>' + response.error.message + response.error.type);
-                    $('#pg_status').removeClass('alert alert-success');
-                    $('#pg_status').addClass('alert alert-danger');
-                    $('#view_posts').attr('disabled');
-                    $('#view_posts').addClass('disabled');
-                    $('#download_posts').attr('disabled');
-                    $('#download_posts').addClass('disabled');
-                }
-                console.log((response.error));
             });
         }
     </script>
@@ -101,37 +85,37 @@
             <div class="details">
                 <div class="pg_name">
                     <label for="">Page Name</label>
-                    <span>Emirates</span>
+                    <span id="page-name">Emirates</span>
                 </div>
                 <div class="stats">
-                    <label for="">Followers</label>
-                    <span>1520110</span>˝
+                    <label for="">Fan Count</label>
+                    <span id="followers"></span>
                 </div>
 
             </div>
             <div class="post">
                 <div class="post-title">
                     <label for="">Title</label>
-                    <textarea readonly name="" id="" cols="50" rows="1">Post 1</textarea>
+                    <textarea readonly name="" id="post-title" cols="50" rows="1">Post 1</textarea>
                 </div>
                 <div class="post-msg">
                     <label for="">Message</label>
-                    <textarea name="" id="" cols="50" rows="10" readonly>
+                    <textarea name="" id="post-message" cols="50" rows="10" readonly>
                             Emirates is turning 10!
                         </textarea>
                 </div>
                 <div class="post-stats ">
                     <div>
                         <label for="">Likes</label>
-                        <input type="text" name="" id="" readonly class="form-control">
+                        <input type="text" name="" id="post-likes" readonly class="form-control">
                     </div>
                     <div>
                         <label for="">Shares</label>
-                        <input type="text" name="" id="" readonly class="form-control">
+                        <input type="text" name="" id="post-shares" readonly class="form-control">
                     </div>
                     <div>
                         <label for="">Comments</label>
-                        <input type="text" name="" id="" readonly class="form-control">
+                        <input type="text" name="" id="post-comments" readonly class="form-control">
                     </div>
 
                 </div>
@@ -141,7 +125,9 @@
                             <i class="glyphicon glyphicon-triangle-left"></i> Load Previous </button>
                     </div>
                     <div>
-                        <button class="btn btn-danger"> Return to Main <i class="glyphicon glyphicon-retweet"></i></i>
+                        <button class="btn btn-danger"> Return to Main
+                            <i class="glyphicon glyphicon-retweet"></i>
+                            </i>
                         </button>
                     </div>
                     <div>
