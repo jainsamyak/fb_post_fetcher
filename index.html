@@ -100,6 +100,12 @@
     <div class="main-container">
         <form id="regForm">
             <div class="dialog flex">
+                <div class="left-nav form-nav" id="prevBtn" onclick="nextPrev(-1)">
+                        <i class="glyphicon glyphicon-menu-left"></i>
+                </div>
+                <div class="right-nav form-nav" id="nextBtn" onclick="nextPrev(1)">
+                        <i class="glyphicon glyphicon-menu-right"></i>
+                </div>
                 <div class="tab">
                     <div class="steps">Step 1</div>
                     <div class="option">
@@ -137,9 +143,7 @@
                             <br>
                             <button class="green btn-lg no-bevel" onclick="nextPrev(1)" id="download_posts" type="button">Download Posts</button>
                         </div>
-                        <div class="form-group">
-                            <button class="ac-login" onclick="" type="button" id="btn-set-pg">Continue</button>
-                        </div>
+                        
                     </div>
                 </div>
                 <div class="tab">
@@ -149,21 +153,53 @@
                     </div>
                     <div class="option flex">
                         <div class="form-group selection" style="width: 100%">
-                            <label for="">Page Attributes</label>
-                            <select name="page-attributes" id="page-attributes" multiple class="form-control">
-                                <option value="pa-name">Page Name</option>
-                                <option value="pa-fancount">Fan Count</option>
-                                <option value="pa-cover">Cover Image</option>
-                                <option value="pa-picture">Profile Picture</option>
-                                <option value="pa-link">Link</option>
-                                <option value="pa-status">Verification Status</option>
-                            </select>
+                            <div class="form-group-lg">
+                                <label for="">Page Attributes</label>
+
+                                <select name="page-attributes" id="page-attributes" multiple class="form-control">
+                                    <option value="pa-name">Page Name</option>
+                                    <option value="pa-fan_count">Fan Count</option>
+                                    <option value="pa-cover">Cover Image</option>
+                                    <option value="pa-picture">Profile Picture</option>
+                                    <option value="pa-link">Link</option>
+                                    <option value="pa-verification_status">Verification Status</option>
+                                </select>
+                            </div>
                             <button id="transfer-pa" class="btn btn-default" type="button">
                                 <i class="glyphicon glyphicon-chevron-down"></i>
                             </button>
-                            <select name="" id="page-attributes-selected" multiple class="form-control">
-                            </select>
+                            <div class="form-group-lg">
+                                <label for="">Selected Page Attributes</label>
+                                <select name="" id="page-attributes-selected" multiple class="form-control">
+                                </select>
+                            </div>
                         </div>
+                        <div class="form-group selection" style="width: 100%">
+                            <div class="form-group-lg">
+                                <label for="">Post Attributes</label>
+                                <select name="post-attributes" id="post-attributes" multiple class="form-control">
+                                    <option value="po-description"> Post Description</option>
+                                    <option value="po-message">Post Message</option>
+                                    <option value="po-comments">Post Comments + Reactions</option>
+                                    <option value="po-reactions">Post Reactions</option>
+                                    <option value="po-attachments">Attachments</option>
+                                    <option value="po-shares">Shares</option>
+                                    <option value="po-story">Post Story</option>
+                                    <option value="po-with_tags">With_tags</option>
+
+                                </select>
+                            </div>
+                            <button id="transfer-po" class="btn btn-default" type="button">
+                                <i class="glyphicon glyphicon-chevron-down"></i>
+                            </button>
+                            <div class="form-group-lg">
+                                <label for="">Selected Post Attributes</label>
+
+                                <select name="" id="post-attributes-selected" multiple class="form-control">
+                                </select>
+                            </div>
+                        </div>
+
                         <div class="form-group">
                             <button class="ac-login" onclick="" type="button" id="btn-set-pg">Continue</button>
                         </div>
@@ -172,18 +208,15 @@
 
                 <div style="overflow:auto;">
                     <div style="float:right;">
-                        <button type="button" id="prevBtn" onclick="nextPrev(-1)">Previous</button>
-                        <button type="button" id="nextBtn" onclick="nextPrev(1)">Next</button>
                     </div>
                 </div>
-                <div style="text-align:center;margin-top:40px;">
+            </div>
+            <div class="indicator">
                     <span class="step"></span>
                     <span class="step"></span>
                     <span class="step"></span>
                     <span class="step"></span>
                 </div>
-            </div>
-
 
         </form>
 

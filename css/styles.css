@@ -12,7 +12,7 @@ body{
     width: 100%;
     display: flex;
     justify-content: space-around;
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'Source Sans Pro', sans-serif;
     font-size: 2.2rem;
     text-align: center;
 }
@@ -37,6 +37,53 @@ body{
     background: #B388FF;
    border-bottom-left-radius: 7px;
     border-bottom-right-radius: 7px;
+}
+
+.left-nav{
+    display: none;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    float: left;
+    left: 0;
+    height: 70%;
+    width: 6rem;
+    border-top-right-radius: 7px;
+    border-bottom-right-radius: 7px;
+    background: rgba(40, 53, 147  , 0.8);
+    color: white;
+    font-size: 5rem;
+}
+.form-nav:hover{
+    cursor: pointer;
+    animation: hover-effect 300ms ease-in-out forwards;
+
+}
+.right-nav{
+    font-size: 6rem;
+    padding: 1.5rem;
+    border-top-left-radius: 7px;
+    border-bottom-left-radius: 7px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    float: right;
+    color: white;
+    right: 0;
+    height: 70%;
+    width: 6rem;
+    background: rgba(40, 53, 147  , 0.8);
+}
+@keyframes hover-effect{
+    from{
+        opacity: 1;
+        transform: scale(1);
+    }
+    to{
+        transform: scale(1.02);
+        opacity: 0.8;
+    }
 }
 .box{
     width: 100%;
@@ -94,6 +141,7 @@ button{
     padding: 3rem;
     border-radius: 7px;
     height: 50rem;
+    overflow: auto;
     width: 70rem;
 }
 .ac-login{
@@ -116,11 +164,14 @@ button{
 }
 
 .steps{
-    margin-bottom: 2rem;
+    margin: 1rem;
     width: 100%;
     text-align: center;
     font-size: 1.8rem;
     font-weight: 600;
+    border-bottom: 3px solid;
+    border-radius: 2px;
+    margin-bottom: 2rem;;
 }
 .selection{
     border: 1px dashed;
@@ -173,8 +224,15 @@ select::selection{
     padding: 1rem;
     margin-bottom: 1rem;
 }
-
-
+button{
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+}
+.indicator{
+    padding: 1rem;
+    margin: 1rem;
+    text-align: center;
+}
 /* W3 */
 
   
@@ -188,26 +246,19 @@ select::selection{
     display: none;
     height: 100%;
     width: 100%;
-  }
-  
-  button:hover {
-    opacity: 0.8;
-  }
-  
-  #prevBtn {
-    background-color: #bbbbbb;
+    padding: 1rem;
   }
   
   /* Make circles that indicate the steps of the form: */
   .step {
-    height: 15px;
-    width: 15px;
+    height: 2rem;
+    width: 2rem;
     margin: 0 2px;
     background-color: #bbbbbb;
     border: none;  
     border-radius: 50%;
     display: inline-block;
-    opacity: 0.5;
+    opacity: 0.6;
   }
   
   .step.active {
@@ -216,7 +267,7 @@ select::selection{
   
   /* Mark the steps that are finished and valid: */
   .step.finish {
-    background-color: #4CAF50;
+    background-color: #388E3C;
   }
 
 

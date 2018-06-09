@@ -3,10 +3,21 @@ $(document).ready(function () {
     $('#btn-set-pg').on('click', function () {
         let ac_token = $('#txt_ac_token').val();
         let pg_name = $('#txt_pg_name').val();
-        window.localStorage.ac_token=ac_token;
-        window.localStorage.pg_name=pg_name;
+        window.localStorage.ac_token = ac_token;
+        window.localStorage.pg_name = pg_name;
         fetch_page(ac_token, pg_name);
     });
+    $('#nextBtn').on('click', function () {
+        let pg_name = $('#txt_pg_name').val();
+        if (!(pg_name === "")) {
+            let ac_token = $('#txt_ac_token').val();
+            window.localStorage.ac_token = ac_token;
+            window.localStorage.pg_name = pg_name;
+            fetch_page(ac_token, pg_name);
+        }
+
+    });
+
     $('#view_posts').on('click', function () {
         const BrowserWindow = require('electron').remote.BrowserWindow
         const path = require('path')
@@ -17,11 +28,20 @@ $(document).ready(function () {
         win2.loadURL(modalPath)
         win2.show()
     });
-    $('#transfer-pa').on('click',function(){
-        $('#page-attributes  > option:selected').each(function() {
+
+    $('#transfer-pa').on('click', function () {
+        $('#page-attributes  > option:selected').each(function () {
             $(this).remove();
-            $('#page-attributes-selected').append('<option value="'+$(this).val()+'">'+$(this).text()+'</option>');
+            $('#page-attributes-selected').append('<option value="' + $(this).val() + '">' + $(this).text() + '</option>');
         });
     });
+    $('#transfer-po').on('click', function () {
+        $('#post-attributes  > option:selected').each(function () {
+            $(this).remove();
+            $('#post-attributes-selected').append('<option value="' + $(this).val() + '">' + $(this).text() + '</option>');
+        });
+    });
+    
+
 });
 

@@ -10,7 +10,6 @@
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="bootstrap-3.3.7-dist/css/bootstrap.css">
     <script src="js/jquery.js"></script>
-    <script src="js/lib.js"></script>
     <script src="bootstrap-3.3.7-dist/js/bootstrap.js"></script>
     <link href="https://fonts.googleapis.com/css?family=Dancing+Script|Merriweather|Open+Sans|Roboto|Source+Sans+Pro" rel="stylesheet">
     <script>if (window.module) module = window.module;</script>
@@ -64,7 +63,7 @@
                     console.log(response);
                     $('#followers').html(response.fan_count);
                     $('#page-name').html(response.name);
-                    $('#page-picture').html('<img src="'+response.picture.data.url+'">');
+                    $('#page-picture').html('<img src="' + response.picture.data.url + '">');
                     FB.api('/' + pg_name + '/posts', {
                         access_token: window.localStorage.ac_token,
                         limit: 1,
@@ -162,9 +161,18 @@
 
             }
         }
+
+        $(document).ready(function () {
+            $('#exit-view').on('click', function () {
+
+                const remote = require('electron').remote;
+                var window = remote.getCurrentWindow();
+                window.close();
+            });
+        });
     </script>
 
-    
+
     <div class="main-container">
         <div class="view">
             <div class="details">
@@ -212,7 +220,7 @@
                             <i class="glyphicon glyphicon-triangle-left"></i> Load Previous </button>
                     </div>
                     <div>
-                        <button class="btn btn-danger"> Return to Main
+                        <button class="btn btn-danger" id="exit-view"> Return to Main
                             <i class="glyphicon glyphicon-retweet"></i>
                             </i>
                         </button>
@@ -229,8 +237,5 @@
         </div>
     </div>
 </body>
-<script src="js/form.js"></script>
-<script>
-    
-</script>
+
 </html>
