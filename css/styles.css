@@ -112,11 +112,15 @@ button{
 }
 .blue:hover{
     color: #1565C0;
-    background: rgb(241, 243, 245)
+    background: rgb(241, 243, 245);
 }
-.disabled{
-    cursor: not-allowed !important;
-    opacity: 0.65 !important;
+.purple{
+    color: white;
+    background: #4A148C;
+}
+.purple:hover{
+    color: #4A148C;
+    background: rgb(243, 241, 245)
 }
 .green{
     background: #1B5E20;
@@ -126,6 +130,14 @@ button{
     background: rgb(241, 247, 242);
     color: #1B5E20;
 }
+.option button{
+    font-family: 'Raleway';
+}
+.disabled{
+    cursor: not-allowed !important;
+    opacity: 0.65 !important;
+}
+
 .main-container{
     z-index: -1;
     position: absolute;

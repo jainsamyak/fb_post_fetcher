@@ -12,9 +12,6 @@ function showTab(n) {
   } else {
     document.getElementById("prevBtn").style.display = "flex";
   }
-  if (n == (x.length - 1)) {
-  } else {
-  }
   //... and run a function that will display the correct step indicator:
   fixStepIndicator(n)
 }
@@ -29,10 +26,11 @@ function nextPrev(n) {
   // Increase or decrease the current tab by 1:
   currentTab = currentTab + n;
   // if you have reached the end of the form...
-  if (currentTab >= x.length) {
-    // ... the form gets submitted:
-    document.getElementById("regForm").submit();
-    return false;
+  if(currentTab==4){
+    document.getElementById('txt-json').value=window.localStorage.pg_name;
+    document.getElementById('txt-posts').value=window.localStorage.pg_name+"_posts";
+    document.getElementById('txt-comments').value=window.localStorage.pg_name+"_comments";
+
   }
   // Otherwise, display the correct tab:
   showTab(currentTab);
