@@ -76,9 +76,9 @@
                     $('#pg_status').append('<br>' + response.error.message + response.error.type);
                     $('#pg_status').removeClass('alert alert-success');
                     $('#pg_status').addClass('alert alert-danger');
-                    $('#view_posts').attr('disabled');
+                    $('#view_posts').attr('disabled',true);
                     $('#view_posts').addClass('disabled');
-                    $('#download_posts').attr('disabled');
+                    $('#download_posts').attr('disabled',true);
                     $('#download_posts').addClass('disabled');
                 }
                 console.log((response.error));
@@ -211,6 +211,9 @@
                     <div class="box" id="pg_status">
                     </div>
                     <div class="option flex">
+                        <div class="form-group-sm">
+                            <input type="text" name="" id="no_posts" placeholder="Number of posts" class="input-sm form-control">
+                        </div>
                         <div class="form-group" style="width: 100%">
                             <div class="input-group">
                                 <input type="text" class="form-control" id="txt-json">

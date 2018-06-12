@@ -98,6 +98,7 @@ button{
 .form-group{
     width: 100%;
     text-align: center;
+    padding: 1rem;
 }
 .no-bevel{
     width: 100%;
