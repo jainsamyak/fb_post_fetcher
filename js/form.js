@@ -9,13 +9,27 @@ function showTab(n) {
   //... and fix the Previous/Next buttons:
   if (n == 0) {
     document.getElementById("prevBtn").style.display = "none";
+    document.getElementById("nextBtn").style.display = "flex";
+
+  } else if (n == 5) {
+    document.getElementById("nextBtn").style.display = "none";
   } else {
     document.getElementById("prevBtn").style.display = "flex";
+    document.getElementById("nextBtn").style.display = "flex";
   }
   //... and run a function that will display the correct step indicator:
   fixStepIndicator(n)
 }
 
+function enable_btn(id) {
+  $('#' + id).removeAttr('disabled');
+  $('#' + id).removeClass('disabled');
+}
+
+function disable_btn(id) {
+  $('#' + id).attr('disabled',true);
+  $('#' + id).addClass('disabled');
+}
 function nextPrev(n) {
   // This function will figure out which tab to display
   var x = document.getElementsByClassName("tab");
@@ -25,13 +39,25 @@ function nextPrev(n) {
   x[currentTab].style.display = "none";
   // Increase or decrease the current tab by 1:
   currentTab = currentTab + n;
-  // if you have reached the end of the form...
-  if(currentTab==4){
-    document.getElementById('txt-json').value=window.localStorage.pg_name;
-    document.getElementById('txt-posts').value=window.localStorage.pg_name+"_posts";
-    document.getElementById('txt-comments').value=window.localStorage.pg_name+"_comments";
+
+  if (currentTab == 4) {
+    var enable_post = false;
+    var enable_comments = false;
+    let post_attr = $('#post-attributes-selected').val();
+    disable_btn('download_page_posts');
+    disable_btn('download_comments');
+    for (let index = 0; index < post_attr.length; index++) {
+      post_attr[index] = post_attr[index].replace('po-', '');
+      if (post_attr[index] == "message") {
+        enable_btn('download_page_posts');
+      } else if (post_attr[index] == "comments") {
+        enable_btn('download_comments');
+      }
+    }
+
 
   }
+  // if you have reached the end of the form...
   // Otherwise, display the correct tab:
   showTab(currentTab);
 }

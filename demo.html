@@ -1,59 +1,46 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-    <script>
-            window.fbAsyncInit = function () {
-                FB.init({
-                    appId: '1241602892652913',
-                    cookie: true,
-                    xfbml: true,
-                    version: 'v3.0'
-                });
-                fetch_page('EAACEdEose0cBADWJIOk5ouJU1UNK97UtwfSZCWvkWYBAp8u7idZApXhWQ9nLbjD1llkbXNOvDZBRQZBaHZC4nhEMzd4RjozciCg5AiYvuWG5rfXZAn5OhpgH5YZBb3Qsr6oZBPnbxTZC0z1ppcD4XwPvVsYgKHd7ZCuVdZBxykO66naS6fIIafjF6VXZC20Bm3sX7ISmSZA3d54ZAw5QZDZD');
-                FB.AppEvents.logPageView();
-                FB.getLoginStatus(function (response) {
-                    statusChangeCallback(response);
-                });
-            };
-    
-            (function (d, s, id) {
-                var js, fjs = d.getElementsByTagName(s)[0];
-                if (d.getElementById(id)) { return; }
-                js = d.createElement(s); js.id = id;
-                js.src = "https://connect.facebook.net/en_US/sdk.js";
-                fjs.parentNode.insertBefore(js, fjs);
-            }(document, 'script', 'facebook-jssdk'));
-    
-            function statusChangeCallback(response) {
-                if (response.status == 'connected') {
-                    let ac_token = response.authResponse.accessToken;
-                    alert(ac_token);
-                    testAPI();
-                } else {
-                    console.log("Nay!");
-                }
+<script>
+    var fs = require('fs');
+
+    var buildFile = function(name, value) {
+        var img = new Buffer(value, 'base64');
+        fs.writeFile(name, img, function(err) {
+            if(err) {
+                console.log(err);
+            } else {
+                console.log("The file was saved!");
             }
-            function checkLoginState() {
-                FB.getLoginStatus(function (response) {
-                    statusChangeCallback(response);
-                });
-            }
-            function fetch_page(ac_token) {
-                console.log('Welcome!  Fetching your information.... ');
-                FB.api('/Emirates/posts?fields=id,message,description,created_time,comments.limit(1000){message},shares,full_picture,is_published,type,status_type,link,properties&limit=1', {
-                    access_token: ac_token
-                }, function (response) {
-                    console.log(JSON.stringify(response));
-    
-                });
-            }
-        </script>
-</head>
-<body>
-    
-</body>
-</html>
+        });
+    }
+
+    function wait() {
+        $('#close-popup').click();
+        setTimeout(function() {screen_shot()}, 10);
+    }
+
+    function screen_shot() {
+        html2canvas($('body'), {
+          onrendered: function(canvas) {
+              var img = canvas.toDataURL("image/png").split(',')[1];
+              var decodedImg = window.atob(img);
+              query_for_save_path(function (save_path) {
+                buildFile(save_path, img);
+                alert('Screenshot saved to: ' + save_path);
+              });
+          }
+        });
+    }
+
+    function query_for_save_path(cb) {
+      $('#dialog').show();
+      $('#dialog input').one('change', function (event) {
+        cb($(this).val());
+      });
+    }
+</script>
+
+<a href="#" onclick="wait();" data-role="button" data-theme="j">Screen shot</a>
+
+<div id="dialog" style="display:none;">
+  Choose a path to save your shot:
+  <input type="file" nwsaveas />
+</div>

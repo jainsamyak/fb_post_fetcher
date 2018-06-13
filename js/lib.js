@@ -44,9 +44,23 @@ $(document).ready(function () {
         });
     });
 
+    $('#transfer-po-back').on('click', function () {
+        $('#post-attributes-selected  > option:selected').each(function () {
+            $(this).remove();
+            $('#post-attributes').append('<option value="' + $(this).val() + '" selected>' + $(this).text() + '</option>');
+        });
+    });
+    $('#transfer-pa-back').on('click', function () {
+        $('#page-attributes-selected  > option:selected').each(function () {
+            $(this).remove();
+            $('#page-attributes').append('<option value="' + $(this).val() + '" selected>' + $(this).text() + '</option>');
+        });
+    });
+    
+
     $('#download_json').on('click', function () {
 
-        if (is_valid('no_posts') && is_valid('txt_json')) {
+        if (is_valid('no_posts')) {
 
 
             let page_attr = $('#page-attributes-selected').val();
@@ -54,8 +68,6 @@ $(document).ready(function () {
             for (let index = 0; index < page_attr.length; index++) {
                 page_attr[index] = page_attr[index].replace('pa-', '');
             }
-            var enable_post = false;
-            var enable_comments = false;
             for (let index = 0; index < post_attr.length; index++) {
                 post_attr[index] = post_attr[index].replace('po-', '');
                 switch (post_attr[index]) {
@@ -77,8 +89,6 @@ $(document).ready(function () {
                         break;
                 }
             }
-            enable_comments ? enable_btn('download_comments') : disable_btn('download_comments');
-            enable_post ? enable_btn('download_posts') : disable_btn('download_posts');
 
             if (post_attr.length == 0) {
                 alert('Please select a post attribute');
@@ -130,7 +140,33 @@ $(document).ready(function () {
         }
 
     });
+    $('#download_page_posts').on('click', function () {
+        path = invoke_save_posts()
+    });
 
+    function get_independent_posts(url, counter, no_posts, path) {
+
+        if (counter <= no_posts) {
+            let pg_name = window.localStorage.pg_name;
+            let ac_token = window.localStorage.ac_token;
+
+            var xhttp = new XMLHttpRequest();
+            xhttp.open("GET", url, true);
+            xhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    var response = xhttp.responseText;
+                    response = JSON.parse(response);
+                    let postdata = response.data[0].message;
+                    save_post(path, postdata, counter);
+                    let paging = response.paging;
+                    next_url = paging.next;
+                    get_independent_posts(next_url, counter + 1, no_posts, path);
+                }
+            };
+            xhttp.send();
+        }
+
+    }
     function get_posts(url, counter, no_posts) {
 
         if (counter <= no_posts) {
@@ -153,15 +189,82 @@ $(document).ready(function () {
             xhttp.send();
         }
         else {
-            save_files();
+            save_json();
         }
 
 
     }
-    function save_files() {
+    function invoke_save() {
+        const ipc = require('electron').ipcRenderer
+        ipc.send('save-dialog')
+        ipc.on('saved-file', function (event, path) {
+            return path;
+        })
+    }
+
+    function invoke_save_posts() {
+        const ipc = require('electron').ipcRenderer
+        ipc.send('save-dialog')
+        ipc.on('saved-file', function (event, path) {
+
+            if (is_valid('no_posts')) {
+                let post_attr = $('#post-attributes-selected').val();
+
+                if (post_attr.length == 0) {
+                    alert('Please select a post attribute');
+                }
+                let pg_name = window.localStorage.pg_name;
+                let ac_token = window.localStorage.ac_token;
+
+                if (post_attr.length > 0) {
+
+                    FB.api('/' + pg_name + '/posts', {
+                        access_token: ac_token,
+                        fields: 'message',
+                        limit: 1
+                    }, function (response) {
+                        console.log(JSON.stringify(response));
+                        if (response.hasOwnProperty('error')) {
+                            alert(response.error);
+                        } else {
+                            let postdata = response.data[0].message;
+                            save_post(path, postdata, 1);
+                            alert(postdata);
+                            if (response.hasOwnProperty('paging')) {
+                                let paging = response.paging;
+                                next_url = paging.next;
+                                let no_posts = $('#no_posts').val();
+                                get_independent_posts(next_url, 2, no_posts, path);
+                            }
+                        }
+                    });
+
+                }
+
+            }
+            else {
+                alert('All fields are compulsary!');
+            }
+
+        })
+    }
+    function save_json() {
+        path = invoke_save()
+        path = path.split('.')
+        path = path[0] + '.json'
         var fs = require('fs');
 
-        fs.writeFile('new_file.json', '['+json_contents+']', function (err) {
+        fs.writeFile(path, '[' + json_contents + ']', function (err) {
+            if (err) throw err;
+            console.log('Saved! File!!!!!!!!!!!!!!!!!!!');
+        });
+    }
+    function save_post(path, contents, no) {
+
+        path = path.split('.')
+        path = path[0] + no + '.txt'
+        var fs = require('fs');
+        fs.writeFile(path, contents, function (err) {
             if (err) throw err;
             console.log('Saved! File!!!!!!!!!!!!!!!!!!!');
         });
@@ -175,7 +278,7 @@ $(document).ready(function () {
     }
 
     function disable_btn(id) {
-        $('#' + id).attr('disabled',true);
+        $('#' + id).attr('disabled', true);
         $('#' + id).addClass('disabled');
     }
 

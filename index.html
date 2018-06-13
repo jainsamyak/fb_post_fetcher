@@ -76,9 +76,9 @@
                     $('#pg_status').append('<br>' + response.error.message + response.error.type);
                     $('#pg_status').removeClass('alert alert-success');
                     $('#pg_status').addClass('alert alert-danger');
-                    $('#view_posts').attr('disabled',true);
+                    $('#view_posts').attr('disabled', true);
                     $('#view_posts').addClass('disabled');
-                    $('#download_posts').attr('disabled',true);
+                    $('#download_posts').attr('disabled', true);
                     $('#download_posts').addClass('disabled');
                 }
                 console.log((response.error));
@@ -169,6 +169,9 @@
                             <button id="transfer-pa" class="btn btn-default" type="button">
                                 <i class="glyphicon glyphicon-chevron-down"></i>
                             </button>
+                            <button id="transfer-pa-back" class="btn btn-default" type="button">
+                                <i class="glyphicon glyphicon-chevron-up"></i>
+                            </button>
                             <div class="form-group-lg">
                                 <label for="">Selected Page Attributes</label>
                                 <select name="" id="page-attributes-selected" multiple class="form-control" disabled readonly>
@@ -193,10 +196,14 @@
                             <button id="transfer-po" class="btn btn-default" type="button">
                                 <i class="glyphicon glyphicon-chevron-down"></i>
                             </button>
+                            <button id="transfer-po-back" class="btn btn-default" type="button">
+                                <i class="glyphicon glyphicon-chevron-up"></i>
+                            </button>
+
                             <div class="form-group-lg">
                                 <label for="">Selected Post Attributes</label>
 
-                                <select name="" id="post-attributes-selected" multiple class="form-control" readonly>
+                                <select name="" id="post-attributes-selected" multiple class="form-control" disabled readonly>
                                 </select>
                             </div>
                         </div>
@@ -215,28 +222,16 @@
                             <input type="text" name="" id="no_posts" placeholder="Number of posts" class="input-sm form-control">
                         </div>
                         <div class="form-group" style="width: 100%">
-                            <div class="input-group">
-                                <input type="text" class="form-control" id="txt-json">
-                                <span class="input-group-addon">.json</span>
-                            </div>
                             <button class="purple no-bevel btn-lg" id="download_json" type="button">Download JSON
                                 <i class="glyphicon glyphicon-download-alt"></i>
                             </button>
                         </div>
                         <div class="form-group" style="width: 100%">
-                            <div class="input-group">
-                                <input type="text" class="form-control" id="txt-posts">
-                                <span class="input-group-addon">.txt</span>
-                            </div>
-                            <button class="blue no-bevel btn-lg" id="download_posts" type="button">Download Post Text Files
+                            <button class="blue no-bevel btn-lg" id="download_page_posts" type="button">Download Post Text Files
                                 <i class="glyphicon glyphicon-download-alt"></i>
                             </button>
                         </div>
                         <div class="form-group" style="width: 100%">
-                            <div class="input-group">
-                                <input type="text" class="form-control" id="txt-comments">
-                                <span class="input-group-addon">.txt</span>
-                            </div>
                             <button class="green no-bevel btn-lg" id="download_comments" type="button">Download Comments Text Files
                                 <i class="glyphicon glyphicon-download-alt"></i>
                             </button>

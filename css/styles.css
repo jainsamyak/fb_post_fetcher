@@ -17,8 +17,8 @@ body{
     text-align: center;
 }
 .title-main{
+    background: #311B92;
     padding: 1.5rem;
-    background: #380980;
     border-bottom-left-radius: 7px;
     border-bottom-right-radius: 7px;
 }
@@ -140,6 +140,7 @@ button{
 }
 
 .main-container{
+
     z-index: -1;
     position: absolute;
     top: 0;
