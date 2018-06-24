@@ -99,6 +99,17 @@
         </div>
     </div>
     <div class="main-container">
+        <div class="loader alert alert-warning alert-dismissable fade-in">
+            <div class="progress" style="width: 100%">
+                <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100"
+                    style="width:40%" id="progressBar">
+                    <span id="loader-value"></span> 
+                </div>
+            </div>
+            <div>
+                <span class="close" data-dismiss="alert" aria-label="close">&times;</span>
+            </div>
+        </div>
         <form id="regForm">
             <div class="dialog flex">
                 <div class="left-nav form-nav" id="prevBtn" onclick="nextPrev(-1)">

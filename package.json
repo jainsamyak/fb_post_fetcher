@@ -19,6 +19,7 @@
   "license": "MIT",
   "dependencies": {
     "electron-prebuilt": "^1.4.13",
+    "electron-progressbar": "^1.0.4",
     "fb": "^2.0.0",
     "jquery": "^3.3.1"
   }

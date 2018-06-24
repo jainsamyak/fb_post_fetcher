@@ -247,6 +247,16 @@ button{
     margin: 1rem;
     text-align: center;
 }
+.loader{
+    display: flex;
+    justify-content: space-between;
+    padding: 1.5rem;
+    position: absolute;
+    width: 100%;
+    z-index: 200;
+    flex-direction: row;
+
+}
 /* W3 */
 
   

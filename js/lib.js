@@ -56,7 +56,7 @@ $(document).ready(function () {
             $('#page-attributes').append('<option value="' + $(this).val() + '" selected>' + $(this).text() + '</option>');
         });
     });
-    
+
 
     $('#download_json').on('click', function () {
 
@@ -144,6 +144,10 @@ $(document).ready(function () {
         path = invoke_save_posts()
     });
 
+    $('#download_comments').on('click', function () {
+        path = invoke_save_comments();
+    });
+
     function get_independent_posts(url, counter, no_posts, path) {
 
         if (counter <= no_posts) {
@@ -202,6 +206,83 @@ $(document).ready(function () {
         })
     }
 
+    function invoke_save_comments() {
+        const ipc = require('electron').ipcRenderer
+        ipc.send('save-dialog')
+        ipc.on('saved-file', function (event, path) {
+
+            if (is_valid('no_posts')) {
+                let pg_name = window.localStorage.pg_name;
+                let ac_token = window.localStorage.ac_token;
+                let post_attr = $('#post-attributes-selected').val();
+
+                if (post_attr.length > 0) {
+
+                    FB.api('/' + pg_name + '/posts', {
+                        access_token: ac_token,
+                        fields: 'comments.limit(1000),message',
+                        limit: 1
+                    }, function (response) {
+                        if (response.hasOwnProperty('error')) {
+                            alert(response.error);
+                        } else {
+
+                            let comm_data = response.data[0].message;
+                            let comments = response.data[0].comments.data;
+                            console.log(comments);
+                            for (let index = 0; index < comments.length; index++) {
+                                comm_data += "\n" + comments[index].message;
+                            }
+
+                            save_post(path, comm_data, 1);
+                            if (response.hasOwnProperty('paging')) {
+                                let paging = response.paging;
+                                next_url = paging.next;
+                                let no_posts = $('#no_posts').val();
+                                get_comments(next_url, 2, no_posts, path);
+                            }
+                        }
+                    });
+
+                }
+
+            }
+            else {
+                alert('All fields are compulsary!');
+            }
+
+        });
+
+    }
+
+    function get_comments(url, counter, no_posts, path) {
+
+        if (counter <= no_posts) {
+            let pg_name = window.localStorage.pg_name;
+            let ac_token = window.localStorage.ac_token;
+
+            var xhttp = new XMLHttpRequest();
+            xhttp.open("GET", url, true);
+            xhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    var response = xhttp.responseText;
+                    response = JSON.parse(response);
+                    let comm_data = response.data[0].message;
+                    let comments = response.data[0].comments.data;
+                    for (let index = 0; index < comments.length; index++) {
+                        comm_data += "\n" + comments[index].message;
+                    }
+                    save_post(path, comm_data, counter);
+                    let paging = response.paging;
+                    next_url = paging.next;
+                    get_comments(next_url, counter + 1, no_posts, path);
+                }
+            };
+            xhttp.send();
+        }
+
+    }
+
     function invoke_save_posts() {
         const ipc = require('electron').ipcRenderer
         ipc.send('save-dialog')
@@ -229,7 +310,6 @@ $(document).ready(function () {
                         } else {
                             let postdata = response.data[0].message;
                             save_post(path, postdata, 1);
-                            alert(postdata);
                             if (response.hasOwnProperty('paging')) {
                                 let paging = response.paging;
                                 next_url = paging.next;
@@ -246,7 +326,7 @@ $(document).ready(function () {
                 alert('All fields are compulsary!');
             }
 
-        })
+        });
     }
     function save_json() {
         path = invoke_save()
@@ -282,5 +362,19 @@ $(document).ready(function () {
         $('#' + id).addClass('disabled');
     }
 
+
+    function create_progress_bar(max_progress) {
+        
+
+        //return progressBar;
+    }
+    function update_value(cur_val, max_progress, progressBar) {
+
+        
+
+    }
+
+   
+    
 });
 
