@@ -56,37 +56,20 @@
                 statusChangeCallback(response);
             });
         }
-        function fetch_page(ac_token, pg_name) {
-            console.log('Welcome!  Fetching your information.... ');
-            FB.api('/' + pg_name, {
-                access_token: ac_token
-            }, function (response) {
-                if (response.hasOwnProperty('name')) {
-                    $('#pg_status').html('<i class="glyphicon glyphicon-ok" style="color:green"></i>');
-                    $('#pg_status').append('<br>' + response.name + '<br>Page Found!');
-                    $('#pg_status').removeClass('alert alert-danger');
-                    $('#pg_status').addClass('alert alert-success');
-                    $('#view_posts').removeAttr('disabled');
-                    $('#view_posts').removeClass('disabled');
-                    $('#download_posts').removeAttr('disabled');
-                    $('#download_posts').removeClass('disabled');
-                }
-                else {
-                    $('#pg_status').html('<i class="glyphicon glyphicon-remove" style="color:red"></i>');
-                    $('#pg_status').append('<br>' + response.error.message + response.error.type);
-                    $('#pg_status').removeClass('alert alert-success');
-                    $('#pg_status').addClass('alert alert-danger');
-                    $('#view_posts').attr('disabled', true);
-                    $('#view_posts').addClass('disabled');
-                    $('#download_posts').attr('disabled', true);
-                    $('#download_posts').addClass('disabled');
-                }
-                console.log((response.error));
-            });
-        }
-
+        
     </script>
 
+    <div class="loader alert alert-info alert-dismissable fade-in" id="loader">
+        <div class="progress" style="width: 100%; height:4rem;margin:0px">
+            <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width:40%"
+                id="progressBar">
+                <span id="loader-value" style="height: 100%; display: flex;align-items: center; justify-content: center;font-size: 1.8rem;">50%</span>
+            </div>
+        </div>
+        <div style="color: #0B5692;">
+            <span class="close" data-dismiss="alert" aria-label="close" style="font-size: 3rem;">&times;</span>
+        </div>
+    </div>
     <div class="title-bar">
         <div class="title-left">
             Built with Electron
@@ -99,17 +82,7 @@
         </div>
     </div>
     <div class="main-container">
-        <div class="loader alert alert-warning alert-dismissable fade-in">
-            <div class="progress" style="width: 100%">
-                <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100"
-                    style="width:40%" id="progressBar">
-                    <span id="loader-value"></span> 
-                </div>
-            </div>
-            <div>
-                <span class="close" data-dismiss="alert" aria-label="close">&times;</span>
-            </div>
-        </div>
+
         <form id="regForm">
             <div class="dialog flex">
                 <div class="left-nav form-nav" id="prevBtn" onclick="nextPrev(-1)">

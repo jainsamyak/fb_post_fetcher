@@ -248,14 +248,53 @@ button{
     text-align: center;
 }
 .loader{
-    display: flex;
+    display: none;
     justify-content: space-between;
     padding: 1.5rem;
     position: absolute;
+    align-items: center;
     width: 100%;
     z-index: 200;
     flex-direction: row;
+    animation: dropIn 1200ms ease-in-out forwards;
+}
+@keyframes dropIn{
+    from{
+        transform: translateY(-450px);
+    }
+    to{
+        transform: translateY(0px);
+    }
+}
+@keyframes pullOut{
+    from{
+        transform: translateY(0px);
+    }
+    to{
+        transform: translateY(-450px);
+    }
+}
+.statusRed{
+    background: rgba(230, 126, 119,0.85) !important;
+}
+.statusGreen{
+    background: rgba(129, 199, 132,0.85) !important;
 
+}
+.statusYellow{
+    background: rgba(218, 180, 90,0.85) !important;
+
+}
+.alert-info{
+    background: rgba(144, 202, 249,0.85) !important;
+}
+
+.progress{
+    background: rgba(255,255,255,0.85) !important;
+}
+#progressBar{
+    background: rgba(44, 121, 49, 0.75) !important;
+    height: 100%;
 }
 /* W3 */
 

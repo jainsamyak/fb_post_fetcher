@@ -2,12 +2,48 @@
 var json_contents = [];
 
 $(document).ready(function () {
+
+
+    function fetch_page(ac_token, pg_name) {
+        console.log('Welcome!  Fetching your information.... ');
+        FB.api('/' + pg_name, {
+            access_token: ac_token
+        }, function (response) {
+            if (response.hasOwnProperty('name')) {
+                finish_loading('statusGreen');
+                $('#pg_status').html('<i class="glyphicon glyphicon-ok" style="color:green"></i>');
+                $('#pg_status').append('<br>' + response.name + '<br>Page Found!');
+                $('#pg_status').removeClass('alert alert-danger');
+                $('#pg_status').addClass('alert alert-success');
+                $('#view_posts').removeAttr('disabled');
+                $('#view_posts').removeClass('disabled');
+                $('#download_posts').removeAttr('disabled');
+                $('#download_posts').removeClass('disabled');
+
+            }
+            else {
+                finish_loading('statusRed');
+                $('#pg_status').html('<i class="glyphicon glyphicon-remove" style="color:red"></i>');
+                $('#pg_status').append('<br>' + response.error.message + response.error.type);
+                $('#pg_status').removeClass('alert alert-success');
+                $('#pg_status').addClass('alert alert-danger');
+                $('#view_posts').attr('disabled', true);
+                $('#view_posts').addClass('disabled');
+                $('#download_posts').attr('disabled', true);
+                $('#download_posts').addClass('disabled');
+            }
+            console.log((response.error));
+        });
+
+    }
+
     $('#btn-set-pg').on('click', function () {
         let ac_token = $('#txt_ac_token').val();
         let pg_name = $('#txt_pg_name').val();
         window.localStorage.ac_token = ac_token;
         window.localStorage.pg_name = pg_name;
         fetch_page(ac_token, pg_name);
+        start_loading();
     });
     $('#nextBtn').on('click', function () {
         let pg_name = $('#txt_pg_name').val();
@@ -98,11 +134,13 @@ $(document).ready(function () {
 
             if (page_attr.length > 0) {
 
+                start_loading();
                 FB.api('/' + pg_name, {
                     access_token: ac_token,
                     fields: page_attr
                 }, function (response) {
                     if (response.hasOwnProperty('error')) {
+                        finish_loading();
                         alert(response.error);
                     } else {
                         console.log(response);
@@ -127,6 +165,7 @@ $(document).ready(function () {
                             let paging = response.paging;
                             next_url = paging.next;
                             let no_posts = $('#no_posts').val();
+                            update_loading(1, no_posts);
                             get_posts(next_url, 2, no_posts);
                         }
                     }
@@ -142,10 +181,12 @@ $(document).ready(function () {
     });
     $('#download_page_posts').on('click', function () {
         path = invoke_save_posts()
+        start_loading();
     });
 
     $('#download_comments').on('click', function () {
         path = invoke_save_comments();
+        start_loading();
     });
 
     function get_independent_posts(url, counter, no_posts, path) {
@@ -158,6 +199,7 @@ $(document).ready(function () {
             xhttp.open("GET", url, true);
             xhttp.onreadystatechange = function () {
                 if (this.readyState == 4 && this.status == 200) {
+                    update_loading(counter,no_posts);
                     var response = xhttp.responseText;
                     response = JSON.parse(response);
                     let postdata = response.data[0].message;
@@ -181,8 +223,8 @@ $(document).ready(function () {
             xhttp.open("GET", url, true);
             xhttp.onreadystatechange = function () {
                 if (this.readyState == 4 && this.status == 200) {
+                    update_loading(counter, no_posts);
                     var response = xhttp.responseText;
-                    console.log(response);
                     json_contents = json_contents.concat(response);
                     response = JSON.parse(response);
                     let paging = response.paging;
@@ -197,13 +239,6 @@ $(document).ready(function () {
         }
 
 
-    }
-    function invoke_save() {
-        const ipc = require('electron').ipcRenderer
-        ipc.send('save-dialog')
-        ipc.on('saved-file', function (event, path) {
-            return path;
-        })
     }
 
     function invoke_save_comments() {
@@ -239,6 +274,7 @@ $(document).ready(function () {
                                 let paging = response.paging;
                                 next_url = paging.next;
                                 let no_posts = $('#no_posts').val();
+                                update_loading(1,no_posts);
                                 get_comments(next_url, 2, no_posts, path);
                             }
                         }
@@ -265,6 +301,7 @@ $(document).ready(function () {
             xhttp.open("GET", url, true);
             xhttp.onreadystatechange = function () {
                 if (this.readyState == 4 && this.status == 200) {
+                    update_loading(counter,no_posts);
                     var response = xhttp.responseText;
                     response = JSON.parse(response);
                     let comm_data = response.data[0].message;
@@ -314,6 +351,7 @@ $(document).ready(function () {
                                 let paging = response.paging;
                                 next_url = paging.next;
                                 let no_posts = $('#no_posts').val();
+                                update_loading(1,no_posts);
                                 get_independent_posts(next_url, 2, no_posts, path);
                             }
                         }
@@ -329,15 +367,18 @@ $(document).ready(function () {
         });
     }
     function save_json() {
-        path = invoke_save()
-        path = path.split('.')
-        path = path[0] + '.json'
-        var fs = require('fs');
+        const ipc = require('electron').ipcRenderer
+        ipc.send('save-dialog')
+        ipc.on('saved-file', function (event, path) {
+            path = path.split('.')
+            path = path[0] + '.json'
+            var fs = require('fs');
 
-        fs.writeFile(path, '[' + json_contents + ']', function (err) {
-            if (err) throw err;
-            console.log('Saved! File!!!!!!!!!!!!!!!!!!!');
-        });
+            fs.writeFile(path, '[' + json_contents + ']', function (err) {
+                if (err) throw err;
+                console.log('Saved! File!!!!!!!!!!!!!!!!!!!');
+            });
+        })
     }
     function save_post(path, contents, no) {
 
@@ -363,18 +404,49 @@ $(document).ready(function () {
     }
 
 
-    function create_progress_bar(max_progress) {
-        
+    function start_loading() {
+        var $loader = $('#loader');
+        var $Bar = $('#progressBar');
+        var $text = $('#loader-value');
+        $loader.css({
+            'display': 'flex',
+            'animation': 'dropIn 1200ms ease-in-out forwards'
+        });
+        $Bar.css('width', '0%');
+        $text.html("0%");
 
-        //return progressBar;
     }
-    function update_value(cur_val, max_progress, progressBar) {
 
-        
+    function update_loading(value, maxValue) {
+        if (value === maxValue) {
+            finish_loading();
+        } else {
+            var $Bar = $('#progressBar');
+            var $text = $('#loader-value');
+            var updateVal = parseInt((value / maxValue) * 100);
+            $Bar.css('width', updateVal + '%');
+            $text.html(updateVal + '%');
 
+        }
     }
 
-   
-    
+    function finish_loading(statusColor) {
+        var $loader = $('#loader');
+        var $Bar = $('#progressBar');
+        var $text = $('#loader-value');
+        $Bar.css('width', '100%');
+        $text.html("100%");
+        $loader.css({
+            'animation': 'pullOut 800ms ease-in-out forwards 2000ms',
+            'background': statusColor + ' !important'
+        });
+        setTimeout(function () {
+            $loader.css('display', 'none');
+            $text.html('0%');
+            $Bar.css('width', '0%');
+        }, 3000);
+    }
+
+
 });
 
