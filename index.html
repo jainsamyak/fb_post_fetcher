@@ -18,8 +18,12 @@
 </head>
 
 <body>
-
     <script>
+        $(document).ready(function () {
+            if (window.location.href.includes("localhost")) {
+                $('#continue-fb').css('display', 'none');
+            }
+        });
         window.fbAsyncInit = function () {
             FB.init({
                 appId: '1241602892652913',
@@ -27,7 +31,6 @@
                 xfbml: true,
                 version: 'v3.0'
             });
-            //testAPI();
             FB.AppEvents.logPageView();
             FB.getLoginStatus(function (response) {
                 statusChangeCallback(response);
@@ -45,8 +48,9 @@
         function statusChangeCallback(response) {
             if (response.status == 'connected') {
                 let ac_token = response.authResponse.accessToken;
+                window.localStorage.ac_token=ac_token;
                 alert(ac_token);
-                testAPI();
+                $('#txt_ac_token').val(ac_token);
             } else {
                 console.log("Nay!");
             }
@@ -56,7 +60,7 @@
                 statusChangeCallback(response);
             });
         }
-        
+
     </script>
 
     <div class="loader alert alert-info alert-dismissable fade-in" id="loader">
@@ -84,18 +88,20 @@
     <div class="main-container">
 
         <form id="regForm">
+            <div class="steps">Step
+                <span id="step-counter"></span>
+            </div>
             <div class="dialog flex">
-                <div class="left-nav form-nav" id="prevBtn" onclick="nextPrev(-1)">
+                <button type="button" class="left-nav form-nav" id="prevBtn" onclick="nextPrev(-1)">
                     <i class="glyphicon glyphicon-menu-left"></i>
-                </div>
-                <div class="right-nav form-nav" id="nextBtn" onclick="nextPrev(1)">
+                </button>
+                <button type="button" class="right-nav form-nav" id="nextBtn" onclick="nextPrev(1)">
                     <i class="glyphicon glyphicon-menu-right"></i>
-                </div>
+                </button>
                 <div class="tab">
-                    <div class="steps">Step 1</div>
-                    <div class="option">
-                        <div class="fb-login-button" data-width="500" data-max-rows="1" data-size="large" data-button-type="login_with" data-show-faces="true"
-                            data-auto-logout-link="true" data-use-continue-as="true"></div>
+                    <div class="option flex">
+                        <div id="fb-root"></div>
+                        
                     </div>
                     <div class="option flex">
                         <div class="form-group">
@@ -105,9 +111,14 @@
                             <button class="ac-login" onclick="nextPrev(1)" type="button" id="ac-login">Continue with Access Token</button>
                         </div>
                     </div>
+                    <div class="option flex" id="continue-fb">
+                        OR
+                        <hr style="width: 100%;height: 2px">
+                        <a class="ac-login" href="http://localhost/electron_post_fetcher/index.html">Login with facebook
+                        </a>
+                    </div>
                 </div>
                 <div class="tab">
-                    <div class="steps">Step 2</div>
                     <div class="option flex">
                         <div class="form-group">
                             <label for="">Enter Page Name</label>
@@ -119,8 +130,8 @@
                     </div>
                 </div>
                 <div class="tab">
-                    <div class="steps">Step 3</div>
-                    <div class="box" id="pg_status">
+                    <div class="box alert alert-warning" id="pg_status">
+                        Loading....
                     </div>
                     <div class="option flex">
                         <div class="form-group" style="width: 100%">
@@ -132,7 +143,6 @@
                     </div>
                 </div>
                 <div class="tab">
-                    <div class="steps">Step 4</div>
                     <div class="box">
                         Select the attributes
                     </div>
@@ -198,9 +208,6 @@
                     </div>
                 </div>
                 <div class="tab">
-                    <div class="steps">Step 5</div>
-                    <div class="box" id="pg_status">
-                    </div>
                     <div class="option flex">
                         <div class="form-group-sm">
                             <input type="text" name="" id="no_posts" placeholder="Number of posts" class="input-sm form-control">
