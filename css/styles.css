@@ -109,30 +109,41 @@ button{
     transition: all 300ms ease-in-out;
     border-radius: 5px;
     margin-bottom: 1rem;
+    border: none;
 }
 .blue{
     color: white;
     background: #1565C0;
 }
 .blue:hover{
-    color: #1565C0;
-    background: rgb(241, 243, 245);
+    color: white;
+    background: rgb(43, 124, 216);
+    box-shadow: 5px 7px 2px rgba(0,0,0,0.20);
 }
 .purple{
     color: white;
     background: #4A148C;
+
 }
 .purple:hover{
-    color: #4A148C;
-    background: rgb(243, 241, 245)
+    color: white;
+    background: rgb(103, 42, 177);
+    box-shadow: 5px 7px 2px rgba(0,0,0,0.20);
+
 }
 .green{
     background: #1B5E20;
     color: white;
+
 }
 .green:hover{
-    background: rgb(241, 247, 242);
-    color: #1B5E20;
+    background: rgb(42, 130, 48);
+    color: white;
+    box-shadow: 5px 7px 2px rgba(0,0,0,0.20);
+}
+.option{
+    width: 100%;
+    overflow: auto;
 }
 .option button{
     font-family: 'Raleway';
@@ -179,9 +190,9 @@ button{
     align-items: center;
 }
 .ac-login:hover{
-    color: #3b5998;
-    background: rgb(255, 255, 255);
-    border: 1px solid #3b5998;
+    color: #ffffff;
+    background: #546da4;
+    box-shadow: 5px 7px 2px rgba(0,0,0,0.20);
 }
 
 .steps{
@@ -210,7 +221,16 @@ button{
 select::selection{
     background: white;
 }
-/* View Styles */
+
+/* Bootstrap Overrides*/
+
+label{
+    font-size: 2rem;
+    font-weight: 500 !important;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+}
+ 
+ /* View Styles */
 
 .view{
     width: 100%;
@@ -227,6 +247,7 @@ select::selection{
     font-size: 1.8rem;
     font-family: 'Source Sans Pro';
     border: 1px solid;
+    white-space: pre-line;
 }
 .post .post-stats{
     display: flex;
@@ -282,19 +303,9 @@ button{
         transform: translateY(-450px);
     }
 }
-.statusRed{
-    background: rgba(230, 126, 119,0.85) !important;
-}
-.statusGreen{
-    background: rgba(129, 199, 132,0.85) !important;
 
-}
-.statusYellow{
-    background: rgba(218, 180, 90,0.85) !important;
-
-}
 .alert-info{
-    background: rgba(144, 202, 249,0.85) !important;
+    background: rgba(144, 202, 249,0.85) ;
 }
 
 .progress{
@@ -318,6 +329,9 @@ button{
     height: 100%;
     width: 100%;
     padding: 1rem;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
   }
   
   /* Make circles that indicate the steps of the form: */

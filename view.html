@@ -12,178 +12,36 @@
     <script src="js/jquery.js"></script>
     <script src="bootstrap-3.3.7-dist/js/bootstrap.js"></script>
     <link href="https://fonts.googleapis.com/css?family=Dancing+Script|Merriweather|Open+Sans|Roboto|Source+Sans+Pro" rel="stylesheet">
+    <script src="js/lib.js"></script>
     <script>if (window.module) module = window.module;</script>
 </head>
 
 <body>
 
-    <script>
-        window.fbAsyncInit = function () {
-            FB.init({
-                appId: '1241602892652913',
-                cookie: true,
-                xfbml: true,
-                version: 'v3.0'
-            });
-            fetch_details(window.localStorage.ac_token, window.localStorage.pg_name);
-            FB.AppEvents.logPageView();
-            FB.getLoginStatus(function (response) {
-                statusChangeCallback(response);
-            });
-        };
+    
 
-        (function (d, s, id) {
-            var js, fjs = d.getElementsByTagName(s)[0];
-            if (d.getElementById(id)) { return; }
-            js = d.createElement(s); js.id = id;
-            js.src = "https://connect.facebook.net/en_US/sdk.js";
-            fjs.parentNode.insertBefore(js, fjs);
-        }(document, 'script', 'facebook-jssdk'));
-
-        function statusChangeCallback(response) {
-            if (response.status == 'connected') {
-                let ac_token = response.authResponse.accessToken;
-                alert(ac_token);
-                testAPI();
-            } else {
-                console.log("Nay!");
-            }
-        }
-        function checkLoginState() {
-            FB.getLoginStatus(function (response) {
-                statusChangeCallback(response);
-            });
-        }
-        function fetch_details(ac_token, pg_name) {
-            FB.api('/' + pg_name, {
-                access_token: window.localStorage.ac_token,
-                fields: 'fan_count,name,picture'
-            }, function (response) {
-                if (response.hasOwnProperty('fan_count')) {
-                    console.log(response);
-                    $('#followers').html(response.fan_count);
-                    $('#page-name').html(response.name);
-                    $('#page-picture').html('<img src="' + response.picture.data.url + '">');
-                    FB.api('/' + pg_name + '/posts', {
-                        access_token: window.localStorage.ac_token,
-                        limit: 1,
-                        fields: 'description,full_picture,message,likes.limit(0).summary(total_count),comments.limit(0).summary(total_count),shares.limit(0).summary(total_count)'
-                    }, function (response) {
-                        console.log(response);
-                        if (response.hasOwnProperty('data')) {
-                            let data = response.data[0];
-
-                            $('#post-title').html(data.description);
-                            $('#post-message').html(data.message);
-                            $('#post-likes').val(data.likes.summary.total_count);
-                            $('#post-comments').val(data.comments.summary.total_count);
-                            $('#post-shares').val(data.shares.count);
-                            if (response.hasOwnProperty('paging')) {
-                                let paging = response.paging;
-                                paging.hasOwnProperty('next') ? enable_btn('next-post') : disable_btn('next-post');
-                                paging.hasOwnProperty('previous') ? enable_btn('prev-post') : disable_btn('prev-post');
-                            }
-                        } else {
-                            alert("Error fetcching details!");
-                        }
-                    });
-                } else {
-                    alert("Error fetcching details!");
-                }
-            });
-        }
-        function enable_btn(id) {
-            $('#' + id).removeAttr('disabled');
-            $('#' + id).removeClass('disabled');
-        }
-
-        function disable_btn(id) {
-            $('#' + id).attr('disabled',true);
-            $('#' + id).addClass('disabled');
-        }
-        function display_prev_next(ac_token, pg_name, flag, url) {
-            if (flag == 1) {
-                FB.api('/' + pg_name + '/posts', {
-                    access_token: window.localStorage.ac_token,
-                    limit: 1,
-                    after: url,
-                    fields: 'description,full_picture,message,likes.limit(0).summary(total_count),comments.limit(0).summary(total_count),shares.limit(0).summary(total_count)'
-                }, function (response) {
-                    console.log(response);
-                    if (response.hasOwnProperty('data')) {
-                        let data = response.data[0];
-
-                        $('#post-title').html(data.description);
-                        $('#post-message').html(data.message);
-                        $('#post-likes').val(data.likes.summary.total_count);
-                        $('#post-comments').val(data.comments.summary.total_count);
-                        $('#post-shares').val(data.shares.count);
-                        if (response.hasOwnProperty('paging')) {
-                            let paging = response.paging;
-                            paging.hasOwnProperty('next') ? enable_btn('next-post') : disable_btn('next-post');
-                            paging.hasOwnProperty('previous') ? enable_btn('prev-post') : disable_btn('prev-post');
-                            window.after = paging.cursors.after;
-                            window.before = paging.cursors.before;
-
-                        }
-                    } else {
-                        alert("Error fetcching details!");
-                    }
-                });
-
-            }
-            else {
-                FB.api('/' + pg_name + '/posts', {
-                    access_token: window.localStorage.ac_token,
-                    limit: 1,
-                    before: url,
-                    fields: 'description,full_picture,message,likes.limit(0).summary(total_count),comments.limit(0).summary(total_count),shares.limit(0).summary(total_count)'
-                }, function (response) {
-                    console.log(response);
-                    if (response.hasOwnProperty('data')) {
-                        let data = response.data[0];
-                        $('#post-title').html(data.description);
-                        $('#post-message').html(data.message);
-                        $('#post-likes').val(data.likes.summary.total_count);
-                        $('#post-comments').val(data.comments.summary.total_count);
-                        $('#post-shares').val(data.shares.count);
-                        if (response.hasOwnProperty('paging')) {
-                            let paging = response.paging;
-                            paging.hasOwnProperty('next') ? enable_btn('next-post') : disable_btn('next-post');
-                            paging.hasOwnProperty('previous') ? enable_btn('prev-post') : disable_btn('prev-post');
-                            window.after = paging.cursors.after;
-                            window.before = paging.cursors.before;
-                        }
-                    } else {
-                        alert("Error fetcching details!");
-                    }
-                });
-
-            }
-        }
-
-        $(document).ready(function () {
-            $('#exit-view').on('click', function () {
-
-                const remote = require('electron').remote;
-                var window = remote.getCurrentWindow();
-                window.close();
-            });
-        });
-    </script>
-
-
+    <div class="loader alert alert-info alert-dismissable fade-in" id="loader">
+        <div class="progress" style="width: 100%; height:4rem;margin:0px">
+            <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width:40%"
+                id="progressBar">
+                <span id="loader-value" style="height: 100%; display: flex;align-items: center; justify-content: center;font-size: 1.8rem;">50%</span>
+            </div>
+        </div>
+        <div style="color: #0B5692;">
+            <span class="close" data-dismiss="alert" aria-label="close" style="font-size: 3rem;">&times;</span>
+        </div>
+    </div>
     <div class="main-container">
         <div class="view">
             <div class="details">
                 <div class="pg_name">
-                    <label for="">Page Name</label>
+                    <label for="">Page Name: </label>
                     <span id="page-name"></span>
                 </div>
                 <div id="page-picture">
                 </div>
                 <div class="stats">
-                    <label for="">Fan Count</label>
+                    <label for="">Fan Count: </label>
                     <span id="followers"></span>
                 </div>
 
@@ -196,7 +54,6 @@
                 <div class="post-msg">
                     <label for="">Message</label>
                     <textarea name="" id="post-message" cols="50" rows="10" readonly>
-                           
                         </textarea>
                 </div>
                 <div class="post-stats ">
@@ -237,5 +94,173 @@
         </div>
     </div>
 </body>
+<script>
+        window.fbAsyncInit = function () {
+            FB.init({
+                appId: '1241602892652913',
+                cookie: true,
+                xfbml: true,
+                version: 'v3.0'
+            });
+            fetch_details(window.localStorage.ac_token, window.localStorage.pg_name);
+            start_loading();
+            FB.AppEvents.logPageView();
+            FB.getLoginStatus(function (response) {
+                statusChangeCallback(response);
+            });
+        };
 
+        (function (d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) { return; }
+            js = d.createElement(s); js.id = id;
+            js.src = "https://connect.facebook.net/en_US/sdk.js";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+
+        function statusChangeCallback(response) {
+            if (response.status == 'connected') {
+                let ac_token = response.authResponse.accessToken;
+                alert(ac_token);
+                testAPI();
+            } else {
+                console.log("Nay!");
+            }
+        }
+        function checkLoginState() {
+            FB.getLoginStatus(function (response) {
+                statusChangeCallback(response);
+            });
+        }
+        function fetch_details(ac_token, pg_name) {
+            FB.api('/' + pg_name, {
+                access_token: window.localStorage.ac_token,
+                fields: 'fan_count,name,picture'
+            }, function (response) {
+                if (response.hasOwnProperty('fan_count')) {
+                    finish_loading_view('statusGreen');
+                    console.log(response);
+                    $('#followers').html(response.fan_count);
+                    $('#page-name').html(response.name);
+                    $('#page-picture').html('<img src="' + response.picture.data.url + '">');
+                    FB.api('/' + pg_name + '/posts', {
+                        access_token: window.localStorage.ac_token,
+                        limit: 1,
+                        fields: 'description,full_picture,message,likes.limit(0).summary(total_count),comments.limit(0).summary(total_count),shares.limit(0).summary(total_count)'
+                    }, function (response) {
+                        console.log(response);
+                        if (response.hasOwnProperty('data')) {
+                            let data = response.data[0];
+
+                            if (data.hasOwnProperty('description')) {
+                                $('#post-title').html(data.description);
+                            } else {
+                                $('#post-title').html("No title found..");
+                            }
+                            $('#post-title').html(data.description);
+                            $('#post-message').html(data.message);
+                            $('#post-message').append("\n" + data.full_picture);
+                            $('#post-likes').val(data.likes.summary.total_count);
+                            $('#post-comments').val(data.comments.summary.total_count);
+                            $('#post-shares').val(data.shares.count);
+                            if (response.hasOwnProperty('paging')) {
+                                let paging = response.paging;
+                                paging.hasOwnProperty('next') ? enable_btn('next-post') : disable_btn('next-post');
+                                paging.hasOwnProperty('previous') ? enable_btn('prev-post') : disable_btn('prev-post');
+                            }
+                        } else {
+                            finish_loading_view('statusRed');
+                            alert("Error fetching details!");
+                        }
+                    });
+                } else {
+                    finish_loading_view('statusRed');
+                    alert("Error fetching details!");
+                }
+            });
+        }
+        function enable_btn(id) {
+            $('#' + id).removeAttr('disabled');
+            $('#' + id).removeClass('disabled');
+        }
+
+        function disable_btn(id) {
+            $('#' + id).attr('disabled', true);
+            $('#' + id).addClass('disabled');
+        }
+        function display_prev_next(ac_token, pg_name, flag, url) {
+            start_loading();
+            if (flag == 1) {
+                FB.api('/' + pg_name + '/posts', {
+                    access_token: window.localStorage.ac_token,
+                    limit: 1,
+                    after: url,
+                    fields: 'description,full_picture,message,likes.limit(0).summary(total_count),comments.limit(0).summary(total_count),shares.limit(0).summary(total_count)'
+                }, function (response) {
+                    if (response.hasOwnProperty('data')) {
+                        finish_loading_view('statusGreen');
+                        let data = response.data[0];
+
+                        $('#post-title').html(data.description);
+                        $('#post-message').html(data.message);
+                        $('#post-likes').val(data.likes.summary.total_count);
+                        $('#post-comments').val(data.comments.summary.total_count);
+                        $('#post-shares').val(data.shares.count);
+                        if (response.hasOwnProperty('paging')) {
+                            let paging = response.paging;
+                            paging.hasOwnProperty('next') ? enable_btn('next-post') : disable_btn('next-post');
+                            paging.hasOwnProperty('previous') ? enable_btn('prev-post') : disable_btn('prev-post');
+                            window.after = paging.cursors.after;
+                            window.before = paging.cursors.before;
+
+                        }
+                    } else {
+                        finish_loading_view('statusRed');
+                        alert("Error fetching details!");
+                    }
+                });
+
+            }
+            else {
+                start_loading();
+                FB.api('/' + pg_name + '/posts', {
+                    access_token: window.localStorage.ac_token,
+                    limit: 1,
+                    before: url,
+                    fields: 'description,full_picture,message,likes.limit(0).summary(total_count),comments.limit(0).summary(total_count),shares.limit(0).summary(total_count)'
+                }, function (response) {
+                    console.log(response);
+                    if (response.hasOwnProperty('data')) {
+                        finish_loading_view('statusGreen');
+                        let data = response.data[0];
+                        $('#post-title').html(data.description);
+                        $('#post-message').html(data.message);
+                        $('#post-likes').val(data.likes.summary.total_count);
+                        $('#post-comments').val(data.comments.summary.total_count);
+                        $('#post-shares').val(data.shares.count);
+                        if (response.hasOwnProperty('paging')) {
+                            let paging = response.paging;
+                            paging.hasOwnProperty('next') ? enable_btn('next-post') : disable_btn('next-post');
+                            paging.hasOwnProperty('previous') ? enable_btn('prev-post') : disable_btn('prev-post');
+                            window.after = paging.cursors.after;
+                            window.before = paging.cursors.before;
+                        }
+                    } else {
+                        finish_loading_view('statusRed');
+                        alert("Error fetching details!");
+                    }
+                });
+
+            }
+        }
+
+        $(document).ready(function () {
+            $('#exit-view').on('click', function () {
+
+                const remote = require('electron').remote;
+                var window = remote.getCurrentWindow();
+                window.close();
+            });
+        });
+    </script>
 </html>

@@ -1,10 +1,83 @@
 
 var json_contents = [];
+function start_loading() {
+    var $loader = $('#loader');
+    var $Bar = $('#progressBar');
+    var $text = $('#loader-value');
+    $loader.css({
+        'display': 'flex',
+        'animation': 'dropIn 1200ms ease-in-out forwards'
+    });
+    $Bar.css('width', '0%');
+    $text.html("0%");
 
+}
+
+function update_loading(value, maxValue) {
+    if (value == maxValue) {
+        finish_loading('statusGreen');
+    } else {
+        var $Bar = $('#progressBar');
+        var $text = $('#loader-value');
+        var updateVal = parseInt((value / maxValue) * 100);
+        $Bar.css('width', updateVal + '%');
+        $text.html(updateVal + '%');
+
+    }
+}
+function finish_loading(statusColor) {
+    toggle_click(true);
+    var $loader = $('#loader');
+    var $Bar = $('#progressBar');
+    var $text = $('#loader-value');
+    $Bar.css('width', '100%');
+    $text.html("Done!");
+    var dict_status = {
+        "statusRed": "rgba(230, 126, 119,0.85)",
+        "statusGreen": "rgba(129, 199, 132,0.85)",
+        "statusYellow": "rgba(218, 180, 90,0.85)"
+    }
+    $loader.css({
+        "background": dict_status[statusColor],
+        "animation":"pullOut 1000ms ease-in-out forwards 2000ms"
+    });
+    setTimeout(function () {
+        $loader.css('display', 'none');
+        $text.html('0%');
+        $Bar.css('width', '0%');
+    }, 3000);
+}
+function finish_loading_view(statusColor) {
+    var $loader = $('#loader');
+    var $Bar = $('#progressBar');
+    var $text = $('#loader-value');
+    $Bar.css('width', '100%');
+    $text.html("Done!");
+    var dict_status = {
+        "statusRed": "rgba(230, 126, 119,0.85)",
+        "statusGreen": "rgba(129, 199, 132,0.85)",
+        "statusYellow": "rgba(218, 180, 90,0.85)"
+    }
+    $loader.css({
+        "background": dict_status[statusColor],
+        "animation":"pullOut 1000ms ease-in-out forwards 2000ms"
+    });
+    setTimeout(function () {
+        $loader.css('display', 'none');
+        $text.html('0%');
+        $Bar.css('width', '0%');
+    }, 3000);
+}
 $(document).ready(function () {
 
+
+    if(typeof(window.localStorage.ac_token)!="undefined"){
+        $('#txt_ac_token').val(window.localStorage.ac_token);
+    }
     function fetch_page(ac_token, pg_name) {
-        console.log('Welcome!  Fetching your information.... ');
+        disable_btn('nextBtn');
+        disable_btn('view_posts');
+        disable_btn('download_posts');
         FB.api('/' + pg_name, {
             access_token: ac_token
         }, function (response) {
@@ -13,11 +86,10 @@ $(document).ready(function () {
                 $('#pg_status').html('<i class="glyphicon glyphicon-ok" style="color:green"></i>');
                 $('#pg_status').append('<br>' + response.name + '<br>Page Found!');
                 $('#pg_status').removeClass('alert alert-danger');
+                $('#pg_status').removeClass('alert alert-warning');
                 $('#pg_status').addClass('alert alert-success');
-                $('#view_posts').removeAttr('disabled');
-                $('#view_posts').removeClass('disabled');
-                $('#download_posts').removeAttr('disabled');
-                $('#download_posts').removeClass('disabled');
+                enable_btn('view_posts');
+                enable_btn('download_posts');
                 enable_btn('nextBtn');
 
             }
@@ -26,14 +98,10 @@ $(document).ready(function () {
                 $('#pg_status').html('<i class="glyphicon glyphicon-remove" style="color:red"></i>');
                 $('#pg_status').append('<br>' + response.error.message + response.error.type);
                 $('#pg_status').removeClass('alert alert-success');
+                $('#pg_status').removeClass('alert alert-warning');
                 $('#pg_status').addClass('alert alert-danger');
-                $('#view_posts').attr('disabled', true);
-                $('#view_posts').addClass('disabled');
-                $('#download_posts').attr('disabled', true);
-                $('#download_posts').addClass('disabled');
-                disable_btn('nextBtn');
+
             }
-            console.log((response.error));
         });
 
     }
@@ -94,7 +162,15 @@ $(document).ready(function () {
         });
     });
 
+    $('#clearPresets').on('click', function () {
+        toggle_click(true);
+    });
 
+    $('#no_posts').keydown(function () {
+        if ($(this).val() != "") {
+            document.getElementsByClassName('step')[currentTab].className += " finish";
+        }
+    });
     $('#download_json').on('click', function () {
 
         if (is_valid('no_posts')) {
@@ -133,10 +209,10 @@ $(document).ready(function () {
             }
             let pg_name = window.localStorage.pg_name;
             let ac_token = window.localStorage.ac_token;
+            start_loading();
 
             if (page_attr.length > 0) {
 
-                start_loading();
                 FB.api('/' + pg_name, {
                     access_token: ac_token,
                     fields: page_attr
@@ -446,10 +522,15 @@ $(document).ready(function () {
         var $Bar = $('#progressBar');
         var $text = $('#loader-value');
         $Bar.css('width', '100%');
-        $text.html("100%");
+        $text.html("Done!");
+        var dict_status = {
+            "statusRed": "rgba(230, 126, 119,0.85)",
+            "statusGreen": "rgba(129, 199, 132,0.85)",
+            "statusYellow": "rgba(218, 180, 90,0.85)"
+        }
         $loader.css({
-            'animation': 'pullOut 800ms ease-in-out forwards 2000ms',
-            'background': statusColor + ' !important'
+            "background": dict_status[statusColor],
+            "animation":"pullOut 1000ms ease-in-out forwards 2000ms"
         });
         setTimeout(function () {
             $loader.css('display', 'none');

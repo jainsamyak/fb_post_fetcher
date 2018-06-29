@@ -14,54 +14,12 @@
     <script src="bootstrap-3.3.7-dist/js/bootstrap.js"></script>
     <link href="https://fonts.googleapis.com/css?family=Dancing+Script|Merriweather|Open+Sans|Raleway|Roboto|Source+Sans+Pro"
         rel="stylesheet">
+    <script src="js/FB.js"></script>
     <script>if (window.module) module = window.module;</script>
 </head>
 
 <body>
-    <script>
-        $(document).ready(function () {
-            if (window.location.href.includes("localhost")) {
-                $('#continue-fb').css('display', 'none');
-            }
-        });
-        window.fbAsyncInit = function () {
-            FB.init({
-                appId: '1241602892652913',
-                cookie: true,
-                xfbml: true,
-                version: 'v3.0'
-            });
-            FB.AppEvents.logPageView();
-            FB.getLoginStatus(function (response) {
-                statusChangeCallback(response);
-            });
-        };
 
-        (function (d, s, id) {
-            var js, fjs = d.getElementsByTagName(s)[0];
-            if (d.getElementById(id)) { return; }
-            js = d.createElement(s); js.id = id;
-            js.src = "https://connect.facebook.net/en_US/sdk.js";
-            fjs.parentNode.insertBefore(js, fjs);
-        }(document, 'script', 'facebook-jssdk'));
-
-        function statusChangeCallback(response) {
-            if (response.status == 'connected') {
-                let ac_token = response.authResponse.accessToken;
-                window.localStorage.ac_token=ac_token;
-                alert(ac_token);
-                $('#txt_ac_token').val(ac_token);
-            } else {
-                console.log("Nay!");
-            }
-        }
-        function checkLoginState() {
-            FB.getLoginStatus(function (response) {
-                statusChangeCallback(response);
-            });
-        }
-
-    </script>
 
     <div class="loader alert alert-info alert-dismissable fade-in" id="loader">
         <div class="progress" style="width: 100%; height:4rem;margin:0px">
@@ -100,22 +58,13 @@
                 </button>
                 <div class="tab">
                     <div class="option flex">
-                        <div id="fb-root"></div>
-                        
-                    </div>
-                    <div class="option flex">
                         <div class="form-group">
+                            <label for="">Enter Access Token</label>
                             <input type="text" name="" id="txt_ac_token" class="form-control" required placeholder="Access Token">
                         </div>
                         <div class="form-group">
                             <button class="ac-login" onclick="nextPrev(1)" type="button" id="ac-login">Continue with Access Token</button>
                         </div>
-                    </div>
-                    <div class="option flex" id="continue-fb">
-                        OR
-                        <hr style="width: 100%;height: 2px">
-                        <a class="ac-login" href="http://localhost/electron_post_fetcher/index.html">Login with facebook
-                        </a>
                     </div>
                 </div>
                 <div class="tab">
@@ -146,7 +95,7 @@
                     <div class="box">
                         Select the attributes
                     </div>
-                    <div class="option flex">
+                    <div class="option">
                         <div class="form-group selection" style="width: 100%">
                             <div class="form-group-lg">
                                 <label for="">Page Attributes</label>
@@ -203,14 +152,17 @@
                         </div>
 
                         <div class="form-group">
-                            <button class="ac-login" onclick="nextPrev(1)" type="button">Continue</button>
+                            <button class="ac-login" id="clearPresets" onclick="nextPrev(1)" type="button">Continue</button>
                         </div>
                     </div>
                 </div>
                 <div class="tab">
                     <div class="option flex">
-                        <div class="form-group-sm">
-                            <input type="text" name="" id="no_posts" placeholder="Number of posts" class="input-sm form-control">
+                        <div class="form-group-sm form-inline">
+                            <label for="">Number of Posts: </label>
+                            <input type="text" name="" id="no_posts" placeholder="Number of posts"
+                                class="input-sm form-control">
+                            <hr style="width: 100%">
                         </div>
                         <div class="form-group" style="width: 100%">
                             <button class="purple no-bevel btn-lg" id="download_json" type="button">Download JSON
