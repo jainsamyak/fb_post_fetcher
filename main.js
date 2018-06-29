@@ -4,14 +4,17 @@ const path = require('path')
 let win
 
 function createWindow() {
-  win = new BrowserWindow({ width: 900, height: 750, backgroundColor: '#311B92', /* frame: false */ })
+  win = new BrowserWindow({
+    width: 900, height: 750, backgroundColor: '#311B92', webPreferences: {
+      devTools: false
+    }
+  })
   win.loadURL(url.format({
     pathname: path.join(__dirname, './index.html'),
     protocol: 'file:',
     slashes: true
   }))
-  win.webContents.openDevTools();
-  
+
 }
 
 app.on('ready', createWindow)
