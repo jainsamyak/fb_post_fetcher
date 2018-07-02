@@ -16,6 +16,7 @@ The repository contains a folder named **dist**. Once you download the repositor
 - Darwin: For Mac users
 - Win32: For windows users
 - Linux: For Linux users
+
 Once you select the correct folder, you should see the application executable **FBPostFetcher**. Open the application and it should launch correctly.
 
 ---
