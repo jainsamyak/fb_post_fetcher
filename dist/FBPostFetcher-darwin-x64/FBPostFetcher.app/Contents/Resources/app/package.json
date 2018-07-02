@@ -1,0 +1,34 @@
+{
+  "name": "electron_post_fetcher",
+  "version": "1.0.0",
+  "description": "Fetch public posts from Facebook pages & profiles",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build-osx": "electron-packager . FBPostFetcher --app-version 1.0.0 --platform darwin --icon ./assets/logo.icns --out ./dist --overwrite",
+    "build-linux":"electron-packager . FBPostFetcher --app-version 1.0.0 --platform linux --icon ./assets/logo.icns --out ./dist --overwrite",
+    "build-win32":"electron-packager . FBPostFetcher --app-version 1.0.0 --platform win32 --icon ./assets/logo.ico --out ./dist --overwrite",
+    "build-all":"electron-packager . FBPostFetcher --app-version 1.0.0 --platform all --icon ./assets/logo.ico --out ./dist --overwrite"
+
+  },
+  "keywords": [
+    "facebook",
+    "post",
+    "fetcher",
+    "electron",
+    "post",
+    "fetcher"
+  ],
+  "author": "Samyak Jain",
+  "license": "MIT",
+  "dependencies": {
+    "electron-progressbar": "^1.0.4",
+    "fb": "^2.0.0",
+    "jquery": "^3.3.1"
+  },
+  "devDependencies": {
+    "electron-packager": "^12.1.0",
+    "electron-prebuilt": "^1.4.13"
+  }
+}
