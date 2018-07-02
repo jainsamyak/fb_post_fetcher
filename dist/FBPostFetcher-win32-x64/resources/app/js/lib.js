@@ -73,13 +73,13 @@ $(document).ready(function () {
     $('#readme').on('click',function(e){
         const shell = require('electron').shell
         e.preventDefault();
-        shell.openExternal('http://electron.atom.io')
+        shell.openExternal('https://github.com/jainsamyak/fb_post_fetcher/blob/master/README.md')
 
     });
     $('#forkgithub').on('click',function(e){
         const shell = require('electron').shell
         e.preventDefault();
-        shell.openExternal('http://electron.atom.io')
+        shell.openExternal('https://github.com/jainsamyak/fb_post_fetcher')
 
     });
     

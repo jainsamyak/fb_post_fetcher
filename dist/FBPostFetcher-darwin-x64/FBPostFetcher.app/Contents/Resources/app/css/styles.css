@@ -235,9 +235,10 @@ button{
     margin-bottom: 1rem;
     background: #E8EAF6;
     color: #512DA8;
+    font-size: 1.6rem !important;
 }
 .selection select option{
-    padding: 0.5rem;
+    padding: 0.3rem;
 }
 select::selection{
     background: white;
