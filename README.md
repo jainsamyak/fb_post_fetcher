@@ -25,6 +25,7 @@ To use the software, one must have a User Access Token from Facebook that can be
 1. Open [https://developers.facebook.com/tools/explorer/](https://developers.facebook.com/tools/explorer/) and log into Facebook allowing the permissions required to enroll yourself as a FB developer.
 ![Graph Login Screen](https://www.dropbox.com/s/uzblr3gjm5a82az/fb_post_fetcher_graph_login.png?raw=1)
 2. When the following window appears, click on Get Token -> Get PAGE Access Token and select all permissions and finally click Get Access Token.
+
 *NOTE: Facebook Graph API has deprecated the use of user access tokens for Page access and one therfore requires a page access token with the PAGE PUBLIC CONTENT ACCESS feature enabled.*
 ![Graph Main Window](https://www.dropbox.com/s/iqwacfz82c4w1he/fb_post_fetcher_graph.png?raw=1)
 3. Copy the Access Token generated from the site, and paste it into the Access token field in the software. 
