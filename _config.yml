@@ -1,1 +1,9 @@
+title: Samyak Jain - FB Post Downloader & Statistics
+email: jainsamyak330@gmail.com
+description: View and download facebook posts from public pages along with complete insights and statistics
+url: "https://jainsamyak.github.io/" 
+baseurl: /fb_post_fetcher
+github_username: jainsamyak
+
+# Build settings
 theme: jekyll-theme-cayman
